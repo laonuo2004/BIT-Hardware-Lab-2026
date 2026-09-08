@@ -1,0 +1,9 @@
+{
+  "repositories": 13,
+  "tracked_files": 2534,
+  "checked_office_documents": 17,
+  "size_mib": 381.5,
+  "errors": [],
+  "release_zip_verified": true,
+  "scope": "Git integrity, clean worktrees, Office ZIP integrity and index local links; no Vivado simulation or FPGA verification"
+}

@@ -1,0 +1,106 @@
+[
+  {
+    "repo": "cangtianhuang/BIT-pipelined-cpu",
+    "url": "https://github.com/cangtianhuang/BIT-pipelined-cpu",
+    "path": "01_往年完整项目/cangtianhuang__BIT-pipelined-cpu",
+    "commit": "0553a4d6fadeedffce2b08e27db614a22a8791ad",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "ChiZhang-bit/BIT-MIPS-CPU_Design",
+    "url": "https://github.com/ChiZhang-bit/BIT-MIPS-CPU_Design",
+    "path": "01_往年完整项目/ChiZhang-bit__BIT-MIPS-CPU_Design",
+    "commit": "f3550a4de0f91f6a1e6e439dd1c9bbb384566241",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "I-Rinka/build-cpu-within-20days",
+    "url": "https://github.com/I-Rinka/build-cpu-within-20days",
+    "path": "01_往年完整项目/I-Rinka__build-cpu-within-20days",
+    "commit": "51740630c0b492c2ff2f95c5190f5e052c5351db",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "InkosiZhong/BIT-Hardware-Experiment",
+    "url": "https://github.com/InkosiZhong/BIT-Hardware-Experiment",
+    "path": "01_往年完整项目/InkosiZhong__BIT-Hardware-Experiment",
+    "commit": "6b70813b8a30b517a332386b6414e11924266c07",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "ripplesaround/BIT_miniCPU",
+    "url": "https://github.com/ripplesaround/BIT_miniCPU",
+    "path": "02_往年代码补充/ripplesaround__BIT_miniCPU",
+    "commit": "9b67427f1f38211401edc0cb2ec48d9b10744f46",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "Serenos/BIT_CPU",
+    "url": "https://github.com/Serenos/BIT_CPU",
+    "path": "02_往年代码补充/Serenos__BIT_CPU",
+    "commit": "2004b0d39978283e78c371c70d61603c8055b981",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "zsnoob/BIT-PIPELINE-CPU",
+    "url": "https://github.com/zsnoob/BIT-PIPELINE-CPU",
+    "path": "02_往年代码补充/zsnoob__BIT-PIPELINE-CPU",
+    "commit": "0752517f8bc2cd186bc468e0e76d167e46a3ad9f",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "SwingM/BIT_CS_-_Assembly",
+    "url": "https://github.com/SwingM/BIT_CS_-_Assembly",
+    "path": "02_往年代码补充/SwingM__BIT_CS_-_Assembly",
+    "commit": "9068f7118609317f00e430c56a8448d3513a72fd",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "zan-pu/documentation",
+    "url": "https://github.com/zan-pu/documentation",
+    "path": "03_教程与原理图/zan-pu__documentation",
+    "commit": "f6e3f4e517b2270f57636dd1d461562e39d29b88",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "zan-pu/pipelined-zanpu",
+    "url": "https://github.com/zan-pu/pipelined-zanpu",
+    "path": "03_教程与原理图/zan-pu__pipelined-zanpu",
+    "commit": "8b838dd3a3799a90beeece818f185a4cb39684c1",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "zan-pu/diagram",
+    "url": "https://github.com/zan-pu/diagram",
+    "path": "03_教程与原理图/zan-pu__diagram",
+    "commit": "64532785a130ed32dcbe6e00b3a6254ea4cd3a37",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "bit-mips/bitmips_experiments_doc",
+    "url": "https://github.com/bit-mips/bitmips_experiments_doc",
+    "path": "03_教程与原理图/bit-mips__bitmips_experiments_doc",
+    "commit": "3e87fe78509f50d7ead30807f6722201eea84701",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  },
+  {
+    "repo": "bit-mips/bitmips_experiments",
+    "url": "https://github.com/bit-mips/bitmips_experiments",
+    "path": "03_教程与原理图/bit-mips__bitmips_experiments",
+    "commit": "eaf1ad0b2badf93c6abf1cdd1296849212c76365",
+    "method": "git clone --depth 1",
+    "date": "2026-09-08"
+  }
+]
