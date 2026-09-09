@@ -65,7 +65,8 @@ module PipelineCPU(
     wire hazard_rs2=dec_rs2 && id_rs2!=0 && ((idex_valid&&idex_reg_write&&idex_rd==id_rs2)||(exmem_valid&&exmem_reg_write&&exmem_rd==id_rs2)||(memwb_valid&&memwb_reg_write&&memwb_rd==id_rs2));
     wire stall=ifid_valid && !dec_illegal && (hazard_rs1||hazard_rs2);
 
-    reg [31:0] ex_result; always @(*) case(idex_alu_op) ALU_SUB:ex_result=idex_a-idex_b; ALU_OR:ex_result=idex_a|idex_b; ALU_XOR:ex_result=idex_a^idex_b; ALU_AND:ex_result=idex_a&idex_b; default:ex_result=idex_a+(idex_alu_src?idex_imm:idex_b); endcase
+    wire [31:0] ex_operand_b=idex_alu_src?idex_imm:idex_b;
+    reg [31:0] ex_result; always @(*) case(idex_alu_op) ALU_SUB:ex_result=idex_a-ex_operand_b; ALU_OR:ex_result=idex_a|ex_operand_b; ALU_XOR:ex_result=idex_a^ex_operand_b; ALU_AND:ex_result=idex_a&ex_operand_b; default:ex_result=idex_a+ex_operand_b; endcase
     wire signed [31:0] ex_sa=idex_a, ex_sb=idex_b;
     reg ex_take; always @(*) case(idex_branch_op) BR_BEQ:ex_take=(idex_a==idex_b);BR_BNE:ex_take=(idex_a!=idex_b);BR_BLT:ex_take=(ex_sa<ex_sb);BR_BGE:ex_take=(ex_sa>=ex_sb);BR_JAL:ex_take=1;default:ex_take=0;endcase
     wire redirect=idex_valid&&ex_take; wire [31:0] redirect_pc=idex_pc+idex_imm;
@@ -73,8 +74,13 @@ module PipelineCPU(
     assign imem_addr=pc;
     assign dmem_valid=exmem_valid&&(exmem_mem_write||(exmem_wb_sel==WB_MEM)); assign dmem_write=dmem_valid&&exmem_mem_write;
     assign dmem_addr=exmem_alu; assign dmem_wdata=exmem_store;
-    assign retire_valid=memwb_valid; assign retire_pc=memwb_pc; assign retire_reg_write=memwb_valid&&memwb_reg_write;
+    assign retire_valid=memwb_valid; assign retire_pc=memwb_pc; assign retire_reg_write=memwb_valid&&memwb_reg_write&&(memwb_rd!=0);
     assign retire_rd=memwb_rd; assign retire_wdata=memwb_data;
+
+    // synthesis translate_off
+    always @(posedge clk) if(resetn && !redirect && !stall && ifid_valid && dec_illegal)
+        $fatal(1,"ILLEGAL_INSTRUCTION pc=%h instruction=%h",ifid_pc,ifid_instr);
+    // synthesis translate_on
 
     always @(posedge clk or negedge resetn) begin
       if(!resetn) begin

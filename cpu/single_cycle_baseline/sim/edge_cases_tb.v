@@ -18,7 +18,7 @@ module edge_cases_tb;
     if(!take) begin $display("FAIL signed_blt"); errors=errors+1; end
     a=32'hf0f0; b=32'h0ff0; aop=4; #1;
     if(y!==32'h00f0) begin $display("FAIL and"); errors=errors+1; end
-    if(errors==0) $display("EDGE_CASES_PASS"); else $display("EDGE_CASES_FAIL errors=%0d",errors);
+    if(errors==0) $display("EDGE_CASES_PASS"); else $fatal(1,"EDGE_CASES_FAIL errors=%0d",errors);
     $finish;
   end
   initial begin

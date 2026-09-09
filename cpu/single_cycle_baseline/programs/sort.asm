@@ -4,6 +4,7 @@ list:
 
 .text
 bsort:
+	addi x0,x0,0
 	xor t2, t2, t2
 	addi s0, t2, 20
 	ori t0, t2, 0
@@ -24,3 +25,5 @@ end2:
 	addi t0, t0, 4
 end1:
 	blt t0, s0, L1
+finished:
+	jal x0,finished

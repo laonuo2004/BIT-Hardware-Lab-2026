@@ -23,7 +23,7 @@ module decode_tb;
     instr=32'h00001013; #1;
     if (!illegal_instr || reg_write || mem_write || branch_op!=0) begin $display("FAIL illegal"); errors=errors+1; end
     instr=32'h00f0f193; #1; if (alu_op!=4) begin $display("FAIL andi ALU"); errors=errors+1; end
-    if(errors==0) $display("DECODE_PASS"); else $display("DECODE_FAIL errors=%0d",errors);
+    if(errors==0) $display("DECODE_PASS"); else $fatal(1,"DECODE_FAIL errors=%0d",errors);
     $finish;
   end
 endmodule

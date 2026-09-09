@@ -49,7 +49,7 @@ module cpu_sort_tb;
             uut.data_memory.mem[4] == 32'd5) begin
             $display("SORT_PASS");
         end else begin
-            $display("SORT_FAIL");
+            $fatal(1,"SORT_FAIL");
         end
         $finish;
     end
