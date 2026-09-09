@@ -17,3 +17,5 @@ source {仓库绝对路径/cpu/system/scripts/run_send_string_sim.tcl}
 ```
 
 通过标记为 `CPU_SYSTEM_STRING_PASS text=UART_OK_CRLF`。后续取得应用组 ROM 后，只需通过 `ROM_FILE` 参数替换程序，再依次验证排序输出和接收 `r` 重启。
+
+应用组ROM现已接入 `programs/sort_uart.mem`。`scripts/run_sort_uart_sim.tcl` 会核对初始输出以及连续三次输入 `r` 后的四轮完整串口文本；通过标记为 `SORT_UART_SYSTEM_PASS text=SORT_1_2_3_4_5_CRLF rounds=4 commands=3`。

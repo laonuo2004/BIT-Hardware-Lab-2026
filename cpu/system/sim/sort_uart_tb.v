@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
 
 // M6 第三步：冯丽嘉的应用汇编（排序 + UART 输出 + 收 'r' 重跑）系统集成测试。
-// 预期串口输出两遍 "SORT: 1 2 3 4 5\r\n"：复位后一遍，收到 'r' 后一遍。
+// 预期串口输出四遍 "SORT: 1 2 3 4 5\r\n"：复位后一遍，连续三个 'r' 各触发一遍。
 module sort_uart_tb;
     localparam BIT_CYCLES = 8;
     reg clk = 0;
@@ -21,6 +21,7 @@ module sort_uart_tb;
     reg [7:0] received;
     integer byte_index;
     integer bit_index;
+    integer round_index;
 
     CpuSystem #(
         .ROM_WORDS(128),
@@ -67,7 +68,7 @@ module sort_uart_tb;
     end
 
     initial begin : timeout
-        repeat (40000) @(posedge clk);
+        repeat (80000) @(posedge clk);
         $fatal(1, "SORT_UART_TIMEOUT");
     end
 
@@ -114,14 +115,16 @@ module sort_uart_tb;
     endtask
 
     initial begin
-        run_round(1);          // 复位后的第一遍
-        send_char("r");        // 收到 'r' 应重新初始化并再输出一遍
-        run_round(2);
+        run_round(1);
+        for (round_index = 2; round_index <= 4; round_index = round_index + 1) begin
+            send_char("r");
+            run_round(round_index);
+        end
         if (fault_valid || overflow_flag || dut.env.uart.tx_error
             || dut.env.uart.overrun || dut.env.uart.frame_error)
             $fatal(1, "CPU_OR_UART_STATUS_UNEXPECTED fault=%b of=%b txerr=%b",
                 fault_valid, overflow_flag, dut.env.uart.tx_error);
-        $display("SORT_UART_SYSTEM_PASS text=SORT_1_2_3_4_5_CRLF rounds=2");
+        $display("SORT_UART_SYSTEM_PASS text=SORT_1_2_3_4_5_CRLF rounds=4 commands=3");
         disable timeout;
         $finish;
     end
