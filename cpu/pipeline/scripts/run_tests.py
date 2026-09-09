@@ -10,6 +10,8 @@ ROOT = Path(__file__).resolve().parents[3]
 CPU = ROOT / "cpu"
 PIPE = CPU / "pipeline"
 CASES = [
+    ("address_guard_tb", "ADDRESS_GUARD_PASS", "pipeline", [], False),
+    ("fault_tb", "FAULT_PASS", "pipeline", [], False),
     ("cpu_sort_tb", "SORT_PASS", "single_cycle_baseline", [], False),
     ("decode_tb", "DECODE_PASS", "single_cycle_baseline", [], False),
     ("edge_cases_tb", "EDGE_CASES_PASS", "single_cycle_baseline", [], False),

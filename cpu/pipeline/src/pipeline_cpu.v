@@ -8,7 +8,9 @@ module PipelineCPU(
     input [31:0] dmem_rdata,
     output retire_valid, output [31:0] retire_pc,
     output retire_reg_write, output [4:0] retire_rd,
-    output [31:0] retire_wdata
+    output [31:0] retire_wdata,
+    output reg fault_valid, output reg [31:0] fault_pc, fault_addr,
+    output reg [1:0] fault_reason
 );
     localparam WB_ALU=2'd0, WB_MEM=2'd1, WB_PC4=2'd2, WB_IMM=2'd3;
     localparam ALU_ADD=4'd0, ALU_SUB=4'd1, ALU_OR=4'd2, ALU_XOR=4'd3, ALU_AND=4'd4;
@@ -71,19 +73,24 @@ module PipelineCPU(
     reg ex_take; always @(*) case(idex_branch_op) BR_BEQ:ex_take=(idex_a==idex_b);BR_BNE:ex_take=(idex_a!=idex_b);BR_BLT:ex_take=(ex_sa<ex_sb);BR_BGE:ex_take=(ex_sa>=ex_sb);BR_JAL:ex_take=1;default:ex_take=0;endcase
     wire redirect=idex_valid&&ex_take; wire [31:0] redirect_pc=idex_pc+idex_imm;
 
+    wire address_bad; wire [1:0] address_reason;
+    address_guard guard(.addr(exmem_alu),.bad(address_bad),.reason(address_reason));
+    wire raw_mem_access=exmem_valid&&(exmem_mem_write||(exmem_wb_sel==WB_MEM));
+    wire mem_fault=raw_mem_access&&address_bad&&!fault_valid;
     assign imem_addr=pc;
-    assign dmem_valid=exmem_valid&&(exmem_mem_write||(exmem_wb_sel==WB_MEM)); assign dmem_write=dmem_valid&&exmem_mem_write;
+    assign dmem_valid=resetn&&raw_mem_access&&!address_bad&&!fault_valid; assign dmem_write=dmem_valid&&exmem_mem_write;
     assign dmem_addr=exmem_alu; assign dmem_wdata=exmem_store;
     assign retire_valid=memwb_valid; assign retire_pc=memwb_pc; assign retire_reg_write=memwb_valid&&memwb_reg_write&&(memwb_rd!=0);
     assign retire_rd=memwb_rd; assign retire_wdata=memwb_data;
 
     // synthesis translate_off
-    always @(posedge clk) if(resetn && !redirect && !stall && ifid_valid && dec_illegal)
+    always @(posedge clk) if(resetn && !fault_valid && !mem_fault && !redirect && !stall && ifid_valid && dec_illegal)
         $fatal(1,"ILLEGAL_INSTRUCTION pc=%h instruction=%h",ifid_pc,ifid_instr);
     // synthesis translate_on
 
     always @(posedge clk or negedge resetn) begin
       if(!resetn) begin
+        fault_valid<=0;fault_pc<=0;fault_addr<=0;fault_reason<=0;
         pc<=0; ifid_valid<=0; ifid_pc<=0; ifid_instr<=0;
         idex_valid<=0; idex_pc<=0; idex_a<=0; idex_b<=0; idex_imm<=0; idex_rd<=0;
         idex_reg_write<=0; idex_mem_write<=0; idex_alu_src<=0; idex_wb_sel<=0; idex_alu_op<=0; idex_branch_op<=0;
@@ -97,7 +104,13 @@ module PipelineCPU(
         memwb_valid<=exmem_valid; memwb_pc<=exmem_pc; memwb_rd<=exmem_rd; memwb_reg_write<=exmem_reg_write;
         case(exmem_wb_sel) WB_MEM:memwb_data<=dmem_rdata;WB_PC4:memwb_data<=exmem_pc+4;WB_IMM:memwb_data<=exmem_imm;default:memwb_data<=exmem_alu;endcase
         exmem_valid<=idex_valid;exmem_pc<=idex_pc;exmem_alu<=ex_result;exmem_store<=idex_b;exmem_imm<=idex_imm;exmem_rd<=idex_rd;exmem_reg_write<=idex_reg_write;exmem_mem_write<=idex_mem_write;exmem_wb_sel<=idex_wb_sel;
-        if(redirect) begin pc<=redirect_pc;ifid_valid<=0;idex_valid<=0;end
+        if(fault_valid || mem_fault) begin
+          if(!fault_valid) begin
+            fault_valid<=1;fault_pc<=exmem_pc;fault_addr<=exmem_alu;fault_reason<=address_reason;
+          end
+          memwb_valid<=0;exmem_valid<=0;idex_valid<=0;ifid_valid<=0;
+        end
+        else if(redirect) begin pc<=redirect_pc;ifid_valid<=0;idex_valid<=0;end
         else if(stall) begin idex_valid<=0;end
         else begin
           pc<=pc+4;ifid_valid<=1;ifid_pc<=pc;ifid_instr<=imem_rdata;
