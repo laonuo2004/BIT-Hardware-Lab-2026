@@ -1,0 +1,52 @@
+revision: 129cf291a0aee14c30461f21af685c2efd0fd1c0
+Icarus Verilog version 13.0 (stable) (v13_0)
+
+cpu_sort_tb: PASS (exit=0)
+WARNING: <temporary-checkout>/cpu/single_cycle_baseline/src/Top.v:29: $readmemh(text.mem): Not enough words in the file for the requested range [0:255].
+WARNING: <temporary-checkout>/cpu/single_cycle_baseline/src/Top.v:248: $readmemh(data.mem): Too many words in the file for the requested range [0:255].
+VCD info: dumpfile cpu_sort_tb.vcd opened for output.
+sorted_data=1,2,3,4,5
+SORT_PASS
+<temporary-checkout>/cpu/single_cycle_baseline/sim/cpu_sort_tb.v:54: $finish called at 1200000 (1ps)
+
+decode_tb: PASS (exit=0)
+DECODE_PASS
+<temporary-checkout>/cpu/single_cycle_baseline/sim/decode_tb.v:27: $finish called at 18000 (1ps)
+
+edge_cases_tb: PASS (exit=0)
+EDGE_CASES_PASS
+<temporary-checkout>/cpu/single_cycle_baseline/sim/edge_cases_tb.v:22: $finish called at 16000 (1ps)
+
+pipeline_sort_tb: PASS (exit=0)
+WARNING: <temporary-checkout>/cpu/pipeline/sim/pipeline_sort_tb.v:8: $readmemh(text.mem): Not enough words in the file for the requested range [0:255].
+WARNING: <temporary-checkout>/cpu/pipeline/sim/pipeline_sort_tb.v:8: $readmemh(data.mem): Too many words in the file for the requested range [0:255].
+PIPE_SORT_DATA=1,2,3,4,5 cycles=176 retired=73
+PIPE_SORT_PASS
+<temporary-checkout>/cpu/pipeline/sim/pipeline_sort_tb.v:11: $finish called at 1775000 (1ps)
+
+hazard_tb: PASS (exit=0)
+HAZARD_PASS writes=3
+<temporary-checkout>/cpu/pipeline/sim/hazard_tb.v:25: $finish called at 315000 (1ps)
+
+review_tb: FAIL (exit=1)
+RETIRE pc=00000000 rd=1 we=1 value=00000012
+RETIRE pc=00000004 rd=2 we=1 value=00000012
+RETIRE pc=00000008 rd=3 we=1 value=00000000
+RETIRE pc=00000010 rd=4 we=1 value=00000007
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+RETIRE pc=00000014 rd=0 we=1 value=00000018
+REVIEW_FAIL ori expected=31 actual=18
+REVIEW_FAIL andi expected=2 actual=0
+AFTER_ILLEGAL x4=7
+FATAL: <repository>/docs/reviews/2026-09-09-m0-m2/immediate_logic_tb.v:21: IMMEDIATE_LOGIC_FAILED errors=2
+       Time: 412000  Scope: review_tb
+
+failed_cases=1
