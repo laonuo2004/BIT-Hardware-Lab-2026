@@ -80,3 +80,8 @@ always @(posedge clk) begin
  if(check_hold && (ia!==held_pc || dut.ifid_instr!==held_instr || dut.idex_valid!==0))
   $fatal(1,"STALL_PROTOCOL");
 end
+
+initial if($test$plusargs("WAVES")) begin
+ $dumpfile("m3.vcd");
+ $dumpvars(0,dut,clk,resetn,dv,dwe,da,dw,fixture_rdata,rv,rpc,rwe,rd,rwd,of,fv,fpc,fa,fr,bc,mc);
+end

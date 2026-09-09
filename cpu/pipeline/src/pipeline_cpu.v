@@ -81,7 +81,16 @@ module PipelineCPU #(parameter PREDICT_EN=1)(
     wire stall=ifid_valid && !dec_illegal && (hazard_rs1||hazard_rs2);
 
     wire [31:0] ex_operand_b=idex_alu_src?idex_imm:idex_b;
-    reg [31:0] ex_result; always @(*) case(idex_alu_op) ALU_SUB:ex_result=idex_a-ex_operand_b; ALU_OR:ex_result=idex_a|ex_operand_b; ALU_XOR:ex_result=idex_a^ex_operand_b; ALU_AND:ex_result=idex_a&ex_operand_b; default:ex_result=idex_a+ex_operand_b; endcase
+    reg [31:0] ex_result;
+    always @(*) begin
+        case(idex_alu_op)
+            ALU_SUB: ex_result=idex_a-ex_operand_b;
+            ALU_OR:  ex_result=idex_a|ex_operand_b;
+            ALU_XOR: ex_result=idex_a^ex_operand_b;
+            ALU_AND: ex_result=idex_a&ex_operand_b;
+            default: ex_result=idex_a+ex_operand_b;
+        endcase
+    end
     wire ex_overflow;
     overflow_detect overflow_unit(.a(idex_a),.b(ex_operand_b),.result(ex_result),
         .is_sub(idex_alu_op==ALU_SUB),.overflow(ex_overflow));
@@ -126,6 +135,7 @@ module PipelineCPU #(parameter PREDICT_EN=1)(
         for(i=0;i<32;i=i+1) regs[i]<=0;
       end
       else begin
+        // Retire the OLD WB instruction even when the younger MEM instruction faults.
         if(memwb_valid&&memwb_cond_branch) begin
           branch_count<=branch_count+1;
           if(memwb_mispredict) mispredict_count<=mispredict_count+1;
@@ -139,6 +149,7 @@ module PipelineCPU #(parameter PREDICT_EN=1)(
         memwb_valid<=exmem_valid; memwb_pc<=exmem_pc; memwb_rd<=exmem_rd; memwb_reg_write<=exmem_reg_write;
         case(exmem_wb_sel) WB_MEM:memwb_data<=dmem_rdata;WB_PC4:memwb_data<=exmem_pc+4;WB_IMM:memwb_data<=exmem_imm;default:memwb_data<=exmem_alu;endcase
         exmem_valid<=idex_valid;exmem_pc<=idex_pc;exmem_alu<=ex_result;exmem_store<=idex_b;exmem_imm<=idex_imm;exmem_rd<=idex_rd;exmem_reg_write<=idex_reg_write;exmem_mem_write<=idex_mem_write;exmem_wb_sel<=idex_wb_sel;
+        // Priority overrides below cancel younger valid bits, not the old WB event.
         if(fault_valid || mem_fault) begin
           if(!fault_valid) begin
             fault_valid<=1;fault_pc<=exmem_pc;fault_addr<=exmem_alu;fault_reason<=address_reason;
@@ -149,6 +160,7 @@ module PipelineCPU #(parameter PREDICT_EN=1)(
         else if(stall) begin idex_valid<=0;end
         else begin
           pc<=pc+4;ifid_valid<=1;ifid_pc<=pc;ifid_instr<=imem_rdata;
+          // ID issues the branch; the currently fetched sequential instruction is discarded.
           if(ifid_valid&&!dec_illegal&&id_predict_redirect) begin
             pc<=id_predicted_next_pc;ifid_valid<=0;
           end

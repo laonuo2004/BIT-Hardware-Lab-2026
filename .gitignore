@@ -12,3 +12,7 @@
 *.str
 *.vcd
 **/results/*.txt
+
+# Python regression runner
+__pycache__/
+*.pyc

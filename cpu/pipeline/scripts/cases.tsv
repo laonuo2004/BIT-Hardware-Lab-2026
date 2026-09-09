@@ -1,0 +1,20 @@
+# top	pass_marker	group	predict_override	expected_illegal
+m3_integration_tb	M3_INTEGRATION_PASS	pipeline	-1	0
+m3_integration_tb	M3_INTEGRATION_PASS	pipeline	0	0
+pipeline_sort_tb	PIPE_SORT_PASS	pipeline	0	0
+hazard_tb	HAZARD_PASS	pipeline	0	0
+prediction_tb	PREDICTION_PASS	pipeline	-1	0
+prediction_tb	PREDICTION_PASS	pipeline	0	0
+status_mmio_tb	STATUS_MMIO_PASS	pipeline	-1	0
+overflow_tb	OVERFLOW_PASS	pipeline	-1	0
+address_guard_tb	ADDRESS_GUARD_PASS	pipeline	-1	0
+fault_tb	FAULT_PASS	pipeline	-1	0
+cpu_sort_tb	SORT_PASS	single_cycle_baseline	-1	0
+decode_tb	DECODE_PASS	single_cycle_baseline	-1	0
+edge_cases_tb	EDGE_CASES_PASS	single_cycle_baseline	-1	0
+pipeline_sort_tb	PIPE_SORT_PASS	pipeline	-1	0
+hazard_tb	HAZARD_PASS	pipeline	-1	0
+immediate_logic_tb	IMMEDIATE_LOGIC_PASS	pipeline	-1	0
+isa_execute_tb	ISA_EXECUTE_PASS	pipeline	-1	0
+illegal_tb	ILLEGAL_FLUSH_PASS	pipeline	-1	0
+illegal_tb	ILLEGAL_INSTRUCTION	pipeline	-1	1

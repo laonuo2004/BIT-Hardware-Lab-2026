@@ -9,27 +9,13 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[3]
 CPU = ROOT / "cpu"
 PIPE = CPU / "pipeline"
-CASES = [
-    ("m3_integration_tb", "M3_INTEGRATION_PASS", "pipeline", [], False),
-    ("m3_integration_tb", "M3_INTEGRATION_PASS", "pipeline", ["--predict=0"], False),
-    ("pipeline_sort_tb", "PIPE_SORT_PASS", "pipeline", ["--predict=0"], False),
-    ("hazard_tb", "HAZARD_PASS", "pipeline", ["--predict=0"], False),
-    ("prediction_tb", "PREDICTION_PASS", "pipeline", [], False),
-    ("prediction_tb", "PREDICTION_PASS", "pipeline", ["--predict=0"], False),
-    ("status_mmio_tb", "STATUS_MMIO_PASS", "pipeline", [], False),
-    ("overflow_tb", "OVERFLOW_PASS", "pipeline", [], False),
-    ("address_guard_tb", "ADDRESS_GUARD_PASS", "pipeline", [], False),
-    ("fault_tb", "FAULT_PASS", "pipeline", [], False),
-    ("cpu_sort_tb", "SORT_PASS", "single_cycle_baseline", [], False),
-    ("decode_tb", "DECODE_PASS", "single_cycle_baseline", [], False),
-    ("edge_cases_tb", "EDGE_CASES_PASS", "single_cycle_baseline", [], False),
-    ("pipeline_sort_tb", "PIPE_SORT_PASS", "pipeline", [], False),
-    ("hazard_tb", "HAZARD_PASS", "pipeline", [], False),
-    ("immediate_logic_tb", "IMMEDIATE_LOGIC_PASS", "pipeline", [], False),
-    ("isa_execute_tb", "ISA_EXECUTE_PASS", "pipeline", [], False),
-    ("illegal_tb", "ILLEGAL_FLUSH_PASS", "pipeline", [], False),
-    ("illegal_tb", "ILLEGAL_INSTRUCTION", "pipeline", ["+ILLEGAL"], True),
-]
+CASES = []
+for line in Path(__file__).with_name("cases.tsv").read_text().splitlines():
+    if line and not line.startswith("#"):
+        top, marker, group, predict, illegal = line.split("\t")
+        flags = ([] if predict == "-1" else [f"--predict={predict}"]) + (["+ILLEGAL"] if illegal == "1" else [])
+        CASES.append((top, marker, group, flags, illegal == "1"))
+
 
 def run(argv, cwd):
     return subprocess.run(argv, cwd=cwd, text=True, capture_output=True, timeout=60)
@@ -38,6 +24,7 @@ def run(argv, cwd):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", type=Path, default=PIPE / "build" / "regression")
+    parser.add_argument("--waves", action="store_true")
     args = parser.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
     records = []
@@ -53,16 +40,20 @@ def main():
             command = ["iverilog", "-g2012", "-I", str(PIPE / "sim"), "-s", top,
                        "-o", str(work / "sim.vvp"), *map(str, sources), str(CPU / group / "sim" / f"{top}.v")]
             runtime_flags = [flag for flag in flags if not flag.startswith("--predict=")]
+            if args.waves:
+                runtime_flags.append("+WAVES")
             for flag in flags:
                 if flag.startswith("--predict="):
                     command[1:1] = ["-P", f"{top}.PREDICT_EN={flag.split('=')[1]}"]
             try:
                 compiled = run(command, work)
                 result = run(["vvp", str(work / "sim.vvp"), *runtime_flags], work) if compiled.returncode == 0 else compiled
-                output = result.stdout + result.stderr
+                output = compiled.stdout + compiled.stderr + result.stdout + result.stderr
                 passed = compiled.returncode == 0 and marker in output
                 passed &= (result.returncode != 0) if expected_error else (result.returncode == 0 and not any(word in output for word in ["FAIL", "TIMEOUT", "WARNING", "ERROR"]))
-                output = (compiled.stderr + output).replace(str(work), "<build>").replace(str(ROOT), "<repository>")
+                if args.waves and (work / "m3.vcd").exists():
+                    shutil.copyfile(work / "m3.vcd", args.out / f"{name}.vcd")
+                output = output.replace(str(work), "<build>").replace(str(ROOT), "<repository>")
                 (args.out / f"{name}.log").write_text(output)
             except (subprocess.TimeoutExpired, OSError) as error:
                 passed = False
