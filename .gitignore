@@ -1,2 +1,14 @@
 .DS_Store
 *.code-workspace
+
+# Vivado generated files
+**/.Xil/
+**/build/
+**/build_decode/
+**/build_edge/
+**/build_hazard/
+*.jou
+*.log
+*.str
+*.vcd
+**/results/*.txt
