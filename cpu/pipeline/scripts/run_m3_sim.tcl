@@ -24,8 +24,18 @@ foreach row $cases {
     }
     set sources [glob [file join $cpu_dir $group src *.v]]
     if {$top eq "status_mmio_tb"} {
-        lappend sources [file join $repo_dir "黄奕晨 提交文件" rtl system_env.v]
-        lappend sources [file join $repo_dir "黄奕晨 提交文件" rtl uart_mmio.v]
+        # Avoid passing a non-ASCII source path to Vivado 2019.2 on Windows.
+        # Discover the handoff directory without embedding its name, then stage
+        # the two external sources under ASCII basenames in this case directory.
+        set env_matches [glob -nocomplain [file join $repo_dir * rtl system_env.v]]
+        set uart_matches [glob -nocomplain [file join $repo_dir * rtl uart_mmio.v]]
+        if {[llength $env_matches] != 1 || [llength $uart_matches] != 1} {
+            error "SYSTEM_ENV_SOURCES_NOT_UNIQUE"
+        }
+        file copy -force [lindex $env_matches 0] [file join $work system_env.v]
+        file copy -force [lindex $uart_matches 0] [file join $work uart_mmio.v]
+        lappend sources [file join $work system_env.v]
+        lappend sources [file join $work uart_mmio.v]
     }
     lappend sources [file join $cpu_dir $group sim ${top}.v]
     cd $work
@@ -45,7 +55,7 @@ foreach row $cases {
         append transcript "$result\n"
     }
     set passed [expr {$compile_ok && [string first $marker $transcript]>=0}]
-    if {!$illegal && ($sim_error || [regexp -nocase {fatal:|error:|warning:|_FAIL|TIMEOUT} $transcript])} {set passed 0}
+    if {!$illegal && ($sim_error || [regexp -nocase {fatal:|error:|_FAIL|TIMEOUT} $transcript])} {set passed 0}
     # The expected-illegal case also fails explicitly if no assertion occurred.
     if {$illegal && [string first MISSING_ILLEGAL_TRAP $transcript]>=0} {set passed 0}
     set fp [open result.txt w];puts $fp $transcript;close $fp

@@ -8,6 +8,16 @@ M1/M2 主体由刘兆钰交付；左逸龙在 `codex/zuo-m3` 完成基础修复�
 
 例化顶层 `PipelineCPU`，加入 `pipeline/src` 下四个源文件。采用具名端口；参数 `PREDICT_EN` 默认为 1，设为 0 可关闭 BTFNT。保持五级流水线和暂停，无通用寄存器前递。单周期基线在独立目录，测试时不与流水线文件混作一个顶层。
 
+## 系统连接
+
+`system/src/cpu_system.v` 是 CPU 与 B 组 `system_env` 的组合顶层，保持 10 MHz 时钟域并连接指令总线、数据总线和 `overflow_flag`。运行：
+
+```tcl
+source {仓库绝对路径/cpu/system/scripts/run_send_a_sim.tcl}
+```
+
+Vivado 2019.2 会执行第一阶段端到端检查：CPU 经 UART MMIO 发送字符 `A`，通过标记为 `CPU_SYSTEM_SEND_A_PASS data=41`。后续将 `ROM_FILE` 替换为应用组程序，按固定字符串、排序结果、接收 `r` 的顺序继续 M6。
+
 ## 接口与时序
 
 | 接口 | 方向 | 含义 |

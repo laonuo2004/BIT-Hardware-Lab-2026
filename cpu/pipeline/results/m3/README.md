@@ -2,7 +2,9 @@
 
 2026-09-09，功能与测试版本 `f207e908671fd47c263c6c1afecf03faf43dec54`。在干净工作区运行 Icarus Verilog 13.0，**19/19 项按预期通过**，包括一项预期触发非法指令错误的测试。[汇总](summary.json)记录实际版本及各项状态，[源文件 SHA-256](source_sha256.json)用于核对后续文档提交中的代码是否一致。
 
-已完成 `ori/andi` 修复、三个 M3 功能的 CPU 内部接入、组合回归及真实 system_env 状态读取。**Vivado 仿真、综合、板级时序和上板尚未验证。** 本机没有可调用的 Vivado/xsim，所提供 Vivado 脚本只完成了静态检查，不能作为其已运行证据。UART 排序与接收 r 的闭环仍需 M6 完成。
+已完成 `ori/andi` 修复、三个 M3 功能的 CPU 内部接入、组合回归及真实 system_env 状态读取。刘兆钰随后使用 **Vivado 2019.2** 复核：修正 Windows 中文路径兼容后，全量回归 **19/19 通过**；CPU 独立综合为 **0 errors、0 critical warnings**。板级实现、布线后时序和上板仍未验证。UART 排序与接收 r 的闭环仍需 M6 完成。
+
+本次 CPU 独立综合使用 `xc7a35tcsg324-1` 和 10 MHz（100 ns）约束，得到 1050 Slice LUT、1620 Slice Registers，WNS 88.572 ns，约束满足。这里只能证明 CPU 独立综合网表满足当前约束，不能代替包含 Clocking Wizard、system_env、UART 和板级引脚的完整实现时序。
 
 ## 复跑
 
