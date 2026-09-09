@@ -3,11 +3,21 @@ reg clk=0, resetn=0;
 reg [31:0] imem[0:255], dmem[0:255];
 wire [31:0] ia, da, dw, rpc, rwd;
 wire dv, dwe, rv, rwe; wire [4:0] rd;
+wire of;
 wire fv;wire [31:0] fpc,fa;wire [1:0] fr;
+wire [31:0] fixture_rdata;
+`ifdef REAL_ENV
+wire tx;
+system_env env(.clk(clk),.resetn(resetn),.imem_addr(ia),.imem_rdata(),
+ .dmem_valid(dv),.dmem_write(dwe),.dmem_addr(da),.dmem_wdata(dw),
+ .dmem_rdata(fixture_rdata),.overflow_flag(of),.uart_rx(1'b1),.uart_tx(tx));
+`else
+assign fixture_rdata=dmem[da[9:2]];
+`endif
 integer writes=0, retired=0, cycles=0, k;
 PipelineCPU dut(.clk(clk),.resetn(resetn),.imem_addr(ia),.imem_rdata(imem[ia[9:2]]),
- .dmem_valid(dv),.dmem_write(dwe),.dmem_addr(da),.dmem_wdata(dw),.dmem_rdata(dmem[da[9:2]]),
- .retire_valid(rv),.retire_pc(rpc),.retire_reg_write(rwe),.retire_rd(rd),.retire_wdata(rwd),.fault_valid(fv),.fault_pc(fpc),.fault_addr(fa),.fault_reason(fr));
+ .dmem_valid(dv),.dmem_write(dwe),.dmem_addr(da),.dmem_wdata(dw),.dmem_rdata(fixture_rdata),
+ .retire_valid(rv),.retire_pc(rpc),.retire_reg_write(rwe),.retire_rd(rd),.retire_wdata(rwd),.fault_valid(fv),.fault_pc(fpc),.fault_addr(fa),.fault_reason(fr),.overflow_flag(of));
 always #5 clk=~clk;
 always @(posedge clk) if(resetn) begin
  cycles=cycles+1;

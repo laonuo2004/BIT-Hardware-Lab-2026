@@ -10,6 +10,8 @@ ROOT = Path(__file__).resolve().parents[3]
 CPU = ROOT / "cpu"
 PIPE = CPU / "pipeline"
 CASES = [
+    ("status_mmio_tb", "STATUS_MMIO_PASS", "pipeline", [], False),
+    ("overflow_tb", "OVERFLOW_PASS", "pipeline", [], False),
     ("address_guard_tb", "ADDRESS_GUARD_PASS", "pipeline", [], False),
     ("fault_tb", "FAULT_PASS", "pipeline", [], False),
     ("cpu_sort_tb", "SORT_PASS", "single_cycle_baseline", [], False),
@@ -40,6 +42,8 @@ def main():
             for file in (CPU / group / "programs").glob("*.mem"):
                 shutil.copyfile(file, work / file.name)
             sources = list((CPU / group / "src").glob("*.v"))
+            if top == "status_mmio_tb":
+                sources += [ROOT / "黄奕晨 提交文件" / "rtl" / name for name in ["system_env.v", "uart_mmio.v"]]
             command = ["iverilog", "-g2012", "-I", str(PIPE / "sim"), "-s", top,
                        "-o", str(work / "sim.vvp"), *map(str, sources), str(CPU / group / "sim" / f"{top}.v")]
             try:
