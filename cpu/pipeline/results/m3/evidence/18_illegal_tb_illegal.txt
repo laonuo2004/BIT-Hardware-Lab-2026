@@ -1,0 +1,3 @@
+VCD info: dumpfile m3.vcd opened for output.
+FATAL: <repository>/cpu/pipeline/src/pipeline_cpu.v:120: ILLEGAL_INSTRUCTION pc=00000000 instruction=ffffffff
+       Time: 45000  Scope: illegal_tb.dut

@@ -1,0 +1,3 @@
+VCD info: dumpfile m3.vcd opened for output.
+FAULT_PASS
+<repository>/cpu/pipeline/sim/fault_tb.v:30: $finish called at 1486000 (1ps)

@@ -1,0 +1,4 @@
+VCD info: dumpfile cpu_sort_tb.vcd opened for output.
+sorted_data=1,2,3,4,5
+SORT_PASS
+<repository>/cpu/single_cycle_baseline/sim/cpu_sort_tb.v:54: $finish called at 1200000 (1ps)

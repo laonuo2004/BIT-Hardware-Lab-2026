@@ -1,0 +1,3 @@
+VCD info: dumpfile m3.vcd opened for output.
+OVERFLOW_PASS
+<repository>/cpu/pipeline/sim/overflow_tb.v:41: $finish called at 2841000 (1ps)

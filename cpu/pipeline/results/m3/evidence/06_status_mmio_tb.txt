@@ -1,0 +1,3 @@
+VCD info: dumpfile m3.vcd opened for output.
+STATUS_MMIO_PASS
+<repository>/cpu/pipeline/sim/status_mmio_tb.v:25: $finish called at 236000 (1ps)

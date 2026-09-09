@@ -1,0 +1,2 @@
+EDGE_CASES_PASS
+<repository>/cpu/single_cycle_baseline/sim/edge_cases_tb.v:22: $finish called at 16000 (1ps)

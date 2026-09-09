@@ -1,0 +1,17 @@
+RETIRE pc=00000000 rd=1 we=1 value=00000012
+RETIRE pc=00000004 rd=2 we=1 value=0000001f
+RETIRE pc=00000008 rd=3 we=1 value=00000002
+RETIRE pc=0000000c rd=0 we=0 value=00000000
+RETIRE pc=00000010 rd=4 we=1 value=00000007
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+RETIRE pc=00000014 rd=0 we=0 value=00000018
+IMMEDIATE_LOGIC_PASS
+<repository>/cpu/pipeline/sim/immediate_logic_tb.v:22: $finish called at 412000 (1ps)

@@ -10,3 +10,5 @@
 - 独立 CPU 尚未施加板级时钟约束；系统顶层接入 10 MHz 时钟后再做时序验收。
 
 复跑：在 `cpu/pipeline` 下分别执行 `scripts/run_sort_sim.tcl`、`scripts/run_hazard_sim.tcl` 和 `scripts/run_synth.tcl`。
+
+后续 M3 的实际结果见 [M3 功能验证与交接](m3/README.md)，本页保留刘兆钰 M2 阶段原记录。

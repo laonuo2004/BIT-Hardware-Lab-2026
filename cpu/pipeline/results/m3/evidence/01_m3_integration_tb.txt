@@ -1,0 +1,3 @@
+VCD info: dumpfile m3.vcd opened for output.
+M3_INTEGRATION_PASS
+<repository>/cpu/pipeline/sim/m3_integration_tb.v:41: $finish called at 1096000 (1ps)

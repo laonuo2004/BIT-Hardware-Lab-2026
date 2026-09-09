@@ -1,0 +1,2 @@
+DECODE_PASS
+<repository>/cpu/single_cycle_baseline/sim/decode_tb.v:27: $finish called at 18000 (1ps)

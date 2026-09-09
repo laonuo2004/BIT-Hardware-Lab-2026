@@ -1,0 +1,102 @@
+{
+  "revision": "f207e908671fd47c263c6c1afecf03faf43dec54",
+  "working_tree": "",
+  "tool": "Icarus Verilog version 13.0 (stable) (v13_0)",
+  "cases": [
+    {
+      "name": "00_m3_integration_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "01_m3_integration_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "02_pipeline_sort_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "03_hazard_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "04_prediction_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "05_prediction_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "06_status_mmio_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "07_overflow_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "08_address_guard_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "09_fault_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "10_cpu_sort_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "11_decode_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "12_edge_cases_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "13_pipeline_sort_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "14_hazard_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "15_immediate_logic_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "16_isa_execute_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "17_illegal_tb",
+      "passed": true,
+      "expected_error": false
+    },
+    {
+      "name": "18_illegal_tb_illegal",
+      "passed": true,
+      "expected_error": true
+    }
+  ]
+}

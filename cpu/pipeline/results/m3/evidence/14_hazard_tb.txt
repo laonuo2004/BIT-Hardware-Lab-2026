@@ -1,0 +1,2 @@
+HAZARD_PASS writes=3
+<repository>/cpu/pipeline/sim/hazard_tb.v:26: $finish called at 315000 (1ps)

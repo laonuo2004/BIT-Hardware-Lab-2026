@@ -1,0 +1,4 @@
+VCD info: dumpfile m3.vcd opened for output.
+LOOP predict=1 branches=3 misses=1 cycles=28
+PREDICTION_PASS
+<repository>/cpu/pipeline/sim/prediction_tb.v:40: $finish called at 776000 (1ps)

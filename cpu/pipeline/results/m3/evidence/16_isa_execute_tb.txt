@@ -1,0 +1,3 @@
+VCD info: dumpfile m3.vcd opened for output.
+ISA_EXECUTE_PASS
+<repository>/cpu/pipeline/sim/isa_execute_tb.v:46: $finish called at 456000 (1ps)

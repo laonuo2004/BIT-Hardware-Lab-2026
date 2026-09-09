@@ -1,0 +1,2 @@
+ADDRESS_GUARD_PASS
+<repository>/cpu/pipeline/sim/address_guard_tb.v:11: $finish called at 12000 (1ps)

@@ -1,0 +1,3 @@
+PIPE_SORT_DATA=1,2,3,4,5 cycles=223 retired=94
+PIPE_SORT_PASS
+<repository>/cpu/pipeline/sim/pipeline_sort_tb.v:14: $finish called at 2236000 (1ps)
