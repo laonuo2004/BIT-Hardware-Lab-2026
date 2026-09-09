@@ -1,8 +1,10 @@
 // Shared instruction encoders and bus fixture; expected results live in each test.
+parameter PREDICT_EN=1;
 reg clk=0, resetn=0;
 reg [31:0] imem[0:255], dmem[0:255];
 wire [31:0] ia, da, dw, rpc, rwd;
 wire dv, dwe, rv, rwe; wire [4:0] rd;
+wire [31:0] bc,mc;
 wire of;
 wire fv;wire [31:0] fpc,fa;wire [1:0] fr;
 wire [31:0] fixture_rdata;
@@ -15,9 +17,9 @@ system_env env(.clk(clk),.resetn(resetn),.imem_addr(ia),.imem_rdata(),
 assign fixture_rdata=dmem[da[9:2]];
 `endif
 integer writes=0, retired=0, cycles=0, k;
-PipelineCPU dut(.clk(clk),.resetn(resetn),.imem_addr(ia),.imem_rdata(imem[ia[9:2]]),
+PipelineCPU #(.PREDICT_EN(PREDICT_EN)) dut(.clk(clk),.resetn(resetn),.imem_addr(ia),.imem_rdata(imem[ia[9:2]]),
  .dmem_valid(dv),.dmem_write(dwe),.dmem_addr(da),.dmem_wdata(dw),.dmem_rdata(fixture_rdata),
- .retire_valid(rv),.retire_pc(rpc),.retire_reg_write(rwe),.retire_rd(rd),.retire_wdata(rwd),.fault_valid(fv),.fault_pc(fpc),.fault_addr(fa),.fault_reason(fr),.overflow_flag(of));
+ .retire_valid(rv),.retire_pc(rpc),.retire_reg_write(rwe),.retire_rd(rd),.retire_wdata(rwd),.fault_valid(fv),.fault_pc(fpc),.fault_addr(fa),.fault_reason(fr),.overflow_flag(of),.branch_count(bc),.mispredict_count(mc));
 always #5 clk=~clk;
 always @(posedge clk) if(resetn) begin
  cycles=cycles+1;
@@ -68,3 +70,13 @@ task check_reg; input integer idx;input [31:0] expected;
  begin if(dut.regs[idx]!==expected) $fatal(1,"REG x%0d expected=%h got=%h",idx,expected,dut.regs[idx]);end
 endtask
 initial begin #200000;$fatal(1,"GLOBAL_TIMEOUT");end
+
+// Sample before the edge and verify after nonblocking updates settle.
+reg [31:0] held_pc,held_instr;reg check_hold;
+always @(posedge clk) begin
+ check_hold=resetn && dut.stall && !dut.redirect && !dut.mem_fault && !fv;
+ held_pc=ia;held_instr=dut.ifid_instr;
+ #1;
+ if(check_hold && (ia!==held_pc || dut.ifid_instr!==held_instr || dut.idex_valid!==0))
+  $fatal(1,"STALL_PROTOCOL");
+end

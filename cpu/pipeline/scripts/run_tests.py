@@ -10,6 +10,12 @@ ROOT = Path(__file__).resolve().parents[3]
 CPU = ROOT / "cpu"
 PIPE = CPU / "pipeline"
 CASES = [
+    ("m3_integration_tb", "M3_INTEGRATION_PASS", "pipeline", [], False),
+    ("m3_integration_tb", "M3_INTEGRATION_PASS", "pipeline", ["--predict=0"], False),
+    ("pipeline_sort_tb", "PIPE_SORT_PASS", "pipeline", ["--predict=0"], False),
+    ("hazard_tb", "HAZARD_PASS", "pipeline", ["--predict=0"], False),
+    ("prediction_tb", "PREDICTION_PASS", "pipeline", [], False),
+    ("prediction_tb", "PREDICTION_PASS", "pipeline", ["--predict=0"], False),
     ("status_mmio_tb", "STATUS_MMIO_PASS", "pipeline", [], False),
     ("overflow_tb", "OVERFLOW_PASS", "pipeline", [], False),
     ("address_guard_tb", "ADDRESS_GUARD_PASS", "pipeline", [], False),
@@ -46,9 +52,13 @@ def main():
                 sources += [ROOT / "黄奕晨 提交文件" / "rtl" / name for name in ["system_env.v", "uart_mmio.v"]]
             command = ["iverilog", "-g2012", "-I", str(PIPE / "sim"), "-s", top,
                        "-o", str(work / "sim.vvp"), *map(str, sources), str(CPU / group / "sim" / f"{top}.v")]
+            runtime_flags = [flag for flag in flags if not flag.startswith("--predict=")]
+            for flag in flags:
+                if flag.startswith("--predict="):
+                    command[1:1] = ["-P", f"{top}.PREDICT_EN={flag.split('=')[1]}"]
             try:
                 compiled = run(command, work)
-                result = run(["vvp", str(work / "sim.vvp"), *flags], work) if compiled.returncode == 0 else compiled
+                result = run(["vvp", str(work / "sim.vvp"), *runtime_flags], work) if compiled.returncode == 0 else compiled
                 output = result.stdout + result.stderr
                 passed = compiled.returncode == 0 and marker in output
                 passed &= (result.returncode != 0) if expected_error else (result.returncode == 0 and not any(word in output for word in ["FAIL", "TIMEOUT", "WARNING", "ERROR"]))

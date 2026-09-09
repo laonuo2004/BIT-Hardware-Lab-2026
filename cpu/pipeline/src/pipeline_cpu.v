@@ -1,6 +1,6 @@
 `timescale 1ns/1ps
 
-module PipelineCPU(
+module PipelineCPU #(parameter PREDICT_EN=1)(
     input clk, input resetn,
     output [31:0] imem_addr, input [31:0] imem_rdata,
     output dmem_valid, output dmem_write,
@@ -10,13 +10,16 @@ module PipelineCPU(
     output retire_reg_write, output [4:0] retire_rd,
     output [31:0] retire_wdata,
     output reg fault_valid, output reg [31:0] fault_pc, fault_addr,
-    output reg [1:0] fault_reason, output overflow_flag
+    output reg [1:0] fault_reason, output overflow_flag,
+    output reg [31:0] branch_count, mispredict_count
 );
     localparam WB_ALU=2'd0, WB_MEM=2'd1, WB_PC4=2'd2, WB_IMM=2'd3;
     localparam ALU_ADD=4'd0, ALU_SUB=4'd1, ALU_OR=4'd2, ALU_XOR=4'd3, ALU_AND=4'd4;
     localparam BR_NONE=3'd0, BR_BEQ=3'd1, BR_BNE=3'd2, BR_BLT=3'd3, BR_BGE=3'd4, BR_JAL=3'd5;
     localparam IMM_NONE=3'd0, IMM_I=3'd1, IMM_S=3'd2, IMM_B=3'd3, IMM_U=3'd4, IMM_J=3'd5;
 
+    reg [31:0] idex_predicted_next_pc;
+    reg exmem_cond_branch, exmem_mispredict, memwb_cond_branch, memwb_mispredict;
     reg overflow_sticky;
     reg idex_overflow_eligible, exmem_overflow, memwb_overflow;
     reg [31:0] pc;
@@ -64,6 +67,12 @@ module PipelineCPU(
           default: dec_imm=0;
         endcase
     end
+    wire dec_cond_branch=(dec_branch_op!=BR_NONE)&&(dec_branch_op!=BR_JAL);
+    wire [31:0] id_predicted_next_pc;
+    btfnt_predictor #(.PREDICT_EN(PREDICT_EN)) predictor(
+        .pc(ifid_pc),.imm(dec_imm),.is_cond_branch(dec_cond_branch),
+        .predicted_next_pc(id_predicted_next_pc));
+    wire id_predict_redirect=dec_cond_branch&&(id_predicted_next_pc!=ifid_pc+32'd4);
     wire dec_overflow_eligible=!dec_illegal &&
         ((op==7'h33 && f3==0) || (op==7'h13 && f3==0));
     wire [31:0] id_a=(id_rs1==0)?0:regs[id_rs1], id_b=(id_rs2==0)?0:regs[id_rs2];
@@ -81,7 +90,11 @@ module PipelineCPU(
     assign overflow_flag=resetn&&(overflow_sticky||wb_overflow_event);
     wire signed [31:0] ex_sa=idex_a, ex_sb=idex_b;
     reg ex_take; always @(*) case(idex_branch_op) BR_BEQ:ex_take=(idex_a==idex_b);BR_BNE:ex_take=(idex_a!=idex_b);BR_BLT:ex_take=(ex_sa<ex_sb);BR_BGE:ex_take=(ex_sa>=ex_sb);BR_JAL:ex_take=1;default:ex_take=0;endcase
-    wire redirect=idex_valid&&ex_take; wire [31:0] redirect_pc=idex_pc+idex_imm;
+    wire ex_cond_branch=(idex_branch_op!=BR_NONE)&&(idex_branch_op!=BR_JAL);
+    wire [31:0] ex_actual_next_pc=ex_take?idex_pc+idex_imm:idex_pc+32'd4;
+    wire ex_mispredict=ex_cond_branch&&(ex_actual_next_pc!=idex_predicted_next_pc);
+    wire redirect=idex_valid&&((idex_branch_op==BR_JAL)||ex_mispredict);
+    wire [31:0] redirect_pc=ex_actual_next_pc;
 
     wire address_bad; wire [1:0] address_reason;
     address_guard guard(.addr(exmem_alu),.bad(address_bad),.reason(address_reason));
@@ -100,6 +113,8 @@ module PipelineCPU(
 
     always @(posedge clk or negedge resetn) begin
       if(!resetn) begin
+        idex_predicted_next_pc<=0;exmem_cond_branch<=0;exmem_mispredict<=0;
+        memwb_cond_branch<=0;memwb_mispredict<=0;branch_count<=0;mispredict_count<=0;
         overflow_sticky<=0;idex_overflow_eligible<=0;exmem_overflow<=0;memwb_overflow<=0;
         fault_valid<=0;fault_pc<=0;fault_addr<=0;fault_reason<=0;
         pc<=0; ifid_valid<=0; ifid_pc<=0; ifid_instr<=0;
@@ -111,6 +126,12 @@ module PipelineCPU(
         for(i=0;i<32;i=i+1) regs[i]<=0;
       end
       else begin
+        if(memwb_valid&&memwb_cond_branch) begin
+          branch_count<=branch_count+1;
+          if(memwb_mispredict) mispredict_count<=mispredict_count+1;
+        end
+        memwb_cond_branch<=exmem_cond_branch;memwb_mispredict<=exmem_mispredict;
+        exmem_cond_branch<=ex_cond_branch;exmem_mispredict<=ex_mispredict;
         if(wb_overflow_event) overflow_sticky<=1;
         memwb_overflow<=exmem_overflow;
         exmem_overflow<=idex_overflow_eligible&&ex_overflow;
@@ -128,6 +149,10 @@ module PipelineCPU(
         else if(stall) begin idex_valid<=0;end
         else begin
           pc<=pc+4;ifid_valid<=1;ifid_pc<=pc;ifid_instr<=imem_rdata;
+          if(ifid_valid&&!dec_illegal&&id_predict_redirect) begin
+            pc<=id_predicted_next_pc;ifid_valid<=0;
+          end
+          idex_predicted_next_pc<=id_predicted_next_pc;
           idex_overflow_eligible<=dec_overflow_eligible;
           idex_valid<=ifid_valid&&!dec_illegal;idex_pc<=ifid_pc;idex_a<=id_a;idex_b<=id_b;idex_imm<=dec_imm;idex_rd<=ifid_instr[11:7];idex_reg_write<=dec_reg_write;idex_mem_write<=dec_mem_write;idex_alu_src<=dec_alu_src;idex_wb_sel<=dec_wb_sel;idex_alu_op<=dec_alu_op;idex_branch_op<=dec_branch_op;
         end

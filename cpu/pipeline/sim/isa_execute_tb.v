@@ -1,7 +1,15 @@
 `timescale 1ns/1ps
 module isa_execute_tb;
 `include "test_support.vh"
+integer trace_index=0;reg [31:0] expected_pc[0:20];integer t;
+always @(posedge clk) if(resetn && rv) begin
+ if(trace_index>=21 || rpc!==expected_pc[trace_index]) $fatal(1,"RETIRE_ORDER index=%0d pc=%h",trace_index,rpc);
+ trace_index=trace_index+1;
+end
 initial begin
+ for(t=0;t<=12;t=t+1) expected_pc[t]=t*4;
+ expected_pc[13]=56;expected_pc[14]=64;expected_pc[15]=72;expected_pc[16]=80;
+ expected_pc[17]=88;expected_pc[18]=92;expected_pc[19]=96;expected_pc[20]=100;
  fresh;
  imem[0]=enc_i(18,0,0,1,7'h13);
  imem[1]=enc_i(15,1,6,2,7'h13);

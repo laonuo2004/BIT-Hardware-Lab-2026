@@ -1,8 +1,9 @@
 `timescale 1ns/1ps
 module hazard_tb;
+ parameter PREDICT_EN=1;
  reg clk=0,resetn=0,done=0; reg [31:0] imem[0:63],dmem[0:63]; integer i,writes=0;
  wire [31:0] ia,da,dw; wire [31:0] ir=imem[ia[7:2]],dr=dmem[da[7:2]]; wire dv,dwe,rv,rwe; wire [31:0] rpc,rwd; wire [4:0] rrd;
- PipelineCPU dut(.clk(clk),.resetn(resetn),.imem_addr(ia),.imem_rdata(ir),.dmem_valid(dv),.dmem_write(dwe),.dmem_addr(da),.dmem_wdata(dw),.dmem_rdata(dr),.retire_valid(rv),.retire_pc(rpc),.retire_reg_write(rwe),.retire_rd(rrd),.retire_wdata(rwd));
+ PipelineCPU #(.PREDICT_EN(PREDICT_EN)) dut(.clk(clk),.resetn(resetn),.imem_addr(ia),.imem_rdata(ir),.dmem_valid(dv),.dmem_write(dwe),.dmem_addr(da),.dmem_wdata(dw),.dmem_rdata(dr),.retire_valid(rv),.retire_pc(rpc),.retire_reg_write(rwe),.retire_rd(rrd),.retire_wdata(rwd));
  always #5 clk=~clk;
  always @(posedge clk) if(resetn&&dwe) begin dmem[da[7:2]]<=dw;writes<=writes+1;end
  initial begin
