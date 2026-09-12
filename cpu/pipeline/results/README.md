@@ -12,3 +12,5 @@
 复跑：在 `cpu/pipeline` 下分别执行 `scripts/run_sort_sim.tcl`、`scripts/run_hazard_sim.tcl` 和 `scripts/run_synth.tcl`。
 
 后续 M3 的实际结果见 [M3 功能验证与交接](m3/README.md)，本页保留刘兆钰 M2 阶段原记录。
+
+结项阶段新增的复杂相关、RAM 边界和四类排序输入结果见 [F1 CPU 扩展回归](f1/README.md)。

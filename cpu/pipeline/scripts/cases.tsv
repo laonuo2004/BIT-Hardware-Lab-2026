@@ -18,3 +18,5 @@ immediate_logic_tb	IMMEDIATE_LOGIC_PASS	pipeline	-1	0
 isa_execute_tb	ISA_EXECUTE_PASS	pipeline	-1	0
 illegal_tb	ILLEGAL_FLUSH_PASS	pipeline	-1	0
 illegal_tb	ILLEGAL_INSTRUCTION	pipeline	-1	1
+f1_extended_tb	F1_EXTENDED_PASS	pipeline	-1	0
+sort_variants_tb	F1_SORT_VARIANTS_PASS	pipeline	-1	0
