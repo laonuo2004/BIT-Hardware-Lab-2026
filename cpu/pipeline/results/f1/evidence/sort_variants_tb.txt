@@ -1,0 +1,5 @@
+F1_SORT_CASE_PASS case=0 data=1,2,3,4,5 cycles=222 retired=81
+F1_SORT_CASE_PASS case=1 data=1,2,3,4,5 cycles=222 retired=101
+F1_SORT_CASE_PASS case=2 data=1,1,2,3,3 cycles=222 retired=93
+F1_SORT_CASE_PASS case=3 data=-5,-1,0,2,3 cycles=222 retired=91
+F1_SORT_VARIANTS_PASS
