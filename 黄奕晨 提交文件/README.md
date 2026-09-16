@@ -117,6 +117,7 @@ GitHub 上建议保留整个「黄奕晨 提交文件」，避免有人漏下 `s
 | `rtl/board_smoke.v` + `constraints/ees338_smoke.xdc` | LED 冒烟 |
 | `rtl/board_clk.v` + `ip/clk_wiz_0/` | 100 MHz → 10 MHz |
 | `rtl/board_uart_ok.v` + `constraints/ees338_uart.xdc` | 上板发 `UART_OK` |
+| `rtl/board_cpu_system.v` + `programs/sort_uart.mem` + `build_cpu_system.tcl` | 完整系统上板：Clocking Wizard + `CpuSystem` + 排序 ROM；约束仍用 `ees338_uart.xdc` |
 | 根目录 Tcl | 你本机英文路径下的重建/下载脚本，组员一般不跑 |
 
 ---
@@ -149,7 +150,7 @@ STATUS：bit0 忙，bit1 RX 有效，bit2 overrun，bit3 帧错误，bit4 忙时
 
 ## 不要推进 GitHub 的
 
-- `b_group` 里的 `build`、`smoke_build`、`clk_build`、`uart_ok_build`
+- `b_group` 里的 `build`、`smoke_build`、`clk_build`、`uart_ok_build`、`system_build`
 - bitstream、`.cache`、`.runs`、`.Xil`
 - `资源-20260909.zip`、往年参考、厂商实验
 - 个人日志（按课程要求另交）
