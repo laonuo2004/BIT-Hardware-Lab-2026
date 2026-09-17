@@ -1,0 +1,104 @@
+
+****** Vivado v2019.2 (64-bit)
+  **** SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+  **** IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source {冯丽嘉 提交文件/scripts/run_uart_mmio_sim.tcl}
+# set script_dir [file dirname [file normalize [info script]]]
+# set feng_dir [file normalize [file join $script_dir ..]]
+# set repo_dir [file normalize [file join $feng_dir ..]]
+# set stage_dir [file normalize [file join $::env(TEMP) bit_hw_uart_mmio_sim]]
+# file delete -force $stage_dir
+# file mkdir $stage_dir
+# file copy -force [file join $feng_dir sim uart_mmio_tb.v] $stage_dir
+# set env_matches [glob -nocomplain [file join $repo_dir * rtl system_env.v]]
+# set uart_matches [glob -nocomplain [file join $repo_dir * rtl uart_mmio.v]]
+# if {[llength $env_matches] != 1 || [llength $uart_matches] != 1} {
+#     error "SYSTEM_ENV_SOURCES_NOT_UNIQUE"
+# }
+# file copy -force [lindex $env_matches 0] [file join $stage_dir system_env.v]
+# file copy -force [lindex $uart_matches 0] [file join $stage_dir uart_mmio.v]
+# set original_dir [pwd]
+# cd $stage_dir
+# set sources [glob [file join $stage_dir *.v]]
+# set transcript ""
+# foreach cmd [list \
+#     [list xvlog -sv {*}$sources] \
+#     [list xelab uart_mmio_tb -s uart_mmio_snapshot -debug typical] \
+#     [list xsim uart_mmio_snapshot -runall]] {
+#     if {[catch {exec {*}$cmd 2>@1} result]} {
+#         append transcript "$result\n"
+#         cd $original_dir
+#         error "UART_MMIO_TB_FAILED\n$transcript"
+#     }
+#     append transcript "$result\n"
+# }
+# cd $original_dir
+# if {[string first "UART_MMIO_TB_PASS" $transcript] < 0} {
+#     error "UART_MMIO_TB_MARKER_MISSING\n$transcript"
+# }
+# puts "UART_MMIO_TB: PASS"
+UART_MMIO_TB: PASS
+# puts $transcript
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_uart_mmio_sim/system_env.v" into library work
+INFO: [VRFC 10-311] analyzing module system_env
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_uart_mmio_sim/uart_mmio.v" into library work
+INFO: [VRFC 10-311] analyzing module uart_mmio
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_uart_mmio_sim/uart_mmio_tb.v" into library work
+INFO: [VRFC 10-311] analyzing module uart_mmio_tb
+Vivado Simulator 2019.2
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: D:\1_learning\归档\2025-2026-2\Xilinx\Vivado\2019.2\bin\unwrapped\win64.o\xelab.exe uart_mmio_tb -s uart_mmio_snapshot -debug typical 
+Multi-threading is on. Using 18 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.uart_mmio
+Compiling module work.system_env
+Compiling module work.uart_mmio_tb
+Built simulation snapshot uart_mmio_snapshot
+
+****** Webtalk v2019.2 (64-bit)
+  **** SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+  **** IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/86188/AppData/Local/Temp/bit_hw_uart_mmio_sim/xsim.dir/uart_mmio_snapshot/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Thu Sep 17 19:14:37 2026...
+
+****** xsim v2019.2 (64-bit)
+  **** SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+  **** IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/uart_mmio_snapshot/xsim_script.tcl
+# xsim {uart_mmio_snapshot} -autoloadwcfg -runall
+Vivado Simulator 2019.2
+Time resolution is 1 ps
+run -all
+S1_PASS ram_and_overflow_read
+S2_PASS tx_55_00_ff
+S3_PASS rx_55_00_ff_r
+S4_PASS busy_write_error_and_clear
+S5_PASS bad_stop_discard_and_clear
+S6_PASS overrun_keeps_old_byte
+S7_PASS same_edge_consume_and_receive
+S8_PASS error_bit_clear
+S9_PASS reset
+S10_PASS unmapped_write_no_side_effect
+S11_PASS false_start_recovery
+S12_PASS reset_mid_transmission
+S13_PASS readonly_and_misaligned_write
+S14_PASS repeated_reset_and_command
+S15_PASS reset_mid_reception
+UART_MMIO_TB_PASS all=15
+$finish called at time : 2164800 ns : File "C:/Users/86188/AppData/Local/Temp/bit_hw_uart_mmio_sim/uart_mmio_tb.v" Line 323
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Sep 17 19:14:42 2026...
+
+# file delete -force $stage_dir
+INFO: [Common 17-206] Exiting Vivado at Thu Sep 17 19:14:43 2026...

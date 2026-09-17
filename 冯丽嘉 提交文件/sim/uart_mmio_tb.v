@@ -20,6 +20,7 @@
 //   S12 发送中途复位（TX 回高、状态清零、复位后正常发送）
 //   S13 只读/未对齐地址写无副作用
 //   S14 反复复位与重复命令
+//   S15 接收中途复位（状态清零、残留帧尾不阻塞、复位后正常接收）
 // ============================================================
 module uart_mmio_tb;
     localparam BIT_CYCLES = 87;          // 10 MHz / 115200 baud
@@ -291,7 +292,34 @@ module uart_mmio_tb;
         end
         $display("S14_PASS repeated_reset_and_command");
 
-        $display("UART_MMIO_TB_PASS all=14");
+        // S15 接收中途复位：帧接收一半时复位。被截断帧的尾部可能被 UART 当作
+        // 新起始位（真实 UART 在空闲线上见到 0 即视为起始位），本场景验证：
+        // 复位清空内部状态、残留帧尾不阻塞后续通信、复位后仍能正确接收。
+        scn_set(15);
+        fork
+            uart_send(8'h5a, 1);
+            begin
+                @(negedge uart_rx);            // 起始位出现，帧已开始
+                repeat (30) @(negedge clk);    // 接收中途复位
+                resetn = 0;
+                repeat (3) @(negedge clk);
+                resetn = 1;
+            end
+        join
+        repeat (900) @(negedge clk);           // 等帧尾和可能的残留帧处理完
+        if (uart_tx !== 1) $fatal(1, "S15 复位后 TX 未回高");
+        bus_check(32'h40000004, 0, 1);         // 忙位已清
+        bus_read_rx(rx_val);                   // 消费可能的残留字节（截断帧尾）
+        bus_wr(32'h40000004, 28);              // 写 1 清 overrun/帧错误/忙写错误
+        bus_check(32'h40000004, 0, 31);        // 全部状态清零
+        uart_send(8'h33, 1);                   // 复位后仍能正常接收
+        bus_check(32'h40000004, 2, 2);
+        bus_read_rx(rx_val);
+        if (rx_val[7:0] !== 8'h33) $fatal(1, "S15 复位后接收错误 got %h", rx_val);
+        bus_check(32'h40000004, 0, 6);
+        $display("S15_PASS reset_mid_reception");
+
+        $display("UART_MMIO_TB_PASS all=15");
         $finish;
     end
 

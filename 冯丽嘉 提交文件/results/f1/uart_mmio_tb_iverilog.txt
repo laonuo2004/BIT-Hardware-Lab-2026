@@ -1,0 +1,16 @@
+S1_PASS ram_and_overflow_read
+S2_PASS tx_55_00_ff
+S3_PASS rx_55_00_ff_r
+S4_PASS busy_write_error_and_clear
+S5_PASS bad_stop_discard_and_clear
+S6_PASS overrun_keeps_old_byte
+S7_PASS same_edge_consume_and_receive
+S8_PASS error_bit_clear
+S9_PASS reset
+S10_PASS unmapped_write_no_side_effect
+S11_PASS false_start_recovery
+S12_PASS reset_mid_transmission
+S13_PASS readonly_and_misaligned_write
+S14_PASS repeated_reset_and_command
+S15_PASS reset_mid_reception
+UART_MMIO_TB_PASS all=15
