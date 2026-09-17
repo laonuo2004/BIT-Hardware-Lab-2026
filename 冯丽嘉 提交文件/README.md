@@ -54,8 +54,8 @@ iverilog -g2012 -o sort_uart_tb.vvp \
 vvp sort_uart_tb.vvp
 ```
 
-实测结果（2026-09-17 复跑，main 最新版本）：
-`SORT_UART_SYSTEM_PASS text=SORT_1_2_3_4_5_CRLF rounds=4 commands=3` —— 复位后输出一遍，连续 3 次收 `r` 各重跑一遍，无故障/溢出/发送错误。日志见 [results/f1/](results/f1/)。
+实测结果（2026-09-17 晚，交互式菜单版 `8296bbe`）：
+`SORT_UART_SYSTEM_PASS text=MENU_CASES_1_2_3_4_R_UNK commands=7` —— 上电菜单、命令 1/2/3/4、`r` 重复、未知命令全部核对通过，无故障/溢出/发送错误。日志见 [results/f1/](results/f1/)。
 **iverilog 11.0 与 Vivado 2019.2 xsim 双环境通过**（Vivado 入口：`cpu/system/scripts/run_sort_uart_sim.tcl`）。
 
 **③ 我的 UART 测试台**（M4，15 个场景全过，iverilog + Vivado 双通过；做过 4 项变异测试，注入的 4 种 UART 缺陷全部被测试台抓住）：

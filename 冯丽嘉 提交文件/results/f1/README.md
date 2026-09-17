@@ -1,6 +1,6 @@
 # F1 UART 与系统测试记录（冯丽嘉）
 
-2026-09-17 对 main 最新版本（`774f7cf`，含黄奕晨板级包装与 IP 封装后的 RTL）复跑全部测试。
+2026-09-17 对 main 版本 `774f7cf` 与交互式菜单版 `8296bbe` 分别复跑。晚 19:18 黄奕晨把应用扩展为「交互式多数据集排序菜单」后，全部证据按新版本重新采集。
 UART 核心 RTL（`uart_mmio.v`、`system_env.v`）自 9/9 起未改动，板级工程直接复用本组应用 ROM（MD5 一致）。
 
 ## 运行环境与命令
@@ -15,7 +15,7 @@ UART 核心 RTL（`uart_mmio.v`、`system_env.v`）自 9/9 起未改动，板级
 | 测试 | iverilog 11.0 | Vivado 2019.2 | 日志 |
 | --- | --- | --- | --- |
 | UART 测试台 15 场景 | 15/15 通过 | 15/15 通过 | [uart_mmio_tb_iverilog.txt](uart_mmio_tb_iverilog.txt) / [uart_mmio_tb_vivado.txt](uart_mmio_tb_vivado.txt) |
-| 排序应用系统闭环（4 轮输出、3 次 `r` 命令） | 通过 | 9/10 已通过（同版本 RTL） | [sort_uart_system_iverilog.txt](sort_uart_system_iverilog.txt) |
+| 交互式菜单系统闭环（上电菜单 + 命令 1/2/3/4/r + 未知命令） | 通过 `commands=7` | 通过 `commands=7` | [sort_uart_system_iverilog.txt](sort_uart_system_iverilog.txt) / [sort_uart_system_vivado.txt](sort_uart_system_vivado.txt) |
 
 ## 场景与 F1 清单对应关系
 

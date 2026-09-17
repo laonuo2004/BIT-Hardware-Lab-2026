@@ -1,6 +1,9 @@
-WARNING: ../黄奕晨 提交文件/rtl/system_env.v:13: $readmemh(sort_uart.mem): Not enough words in the file for the requested range [0:127].
-SORT_UART_ROUND1_OK
-SORT_UART_ROUND2_OK
-SORT_UART_ROUND3_OK
-SORT_UART_ROUND4_OK
-SORT_UART_SYSTEM_PASS text=SORT_1_2_3_4_5_CRLF rounds=4 commands=3
+WARNING: ../黄奕晨 提交文件/rtl/system_env.v:13: $readmemh(sort_uart.mem): Not enough words in the file for the requested range [0:1023].
+SORT_UART_MENU_OK
+SORT_UART_CMD2_OK
+SORT_UART_CMDR_OK
+SORT_UART_CMD1_OK
+SORT_UART_CMD3_OK
+SORT_UART_CMD4_OK
+SORT_UART_UNK_OK
+SORT_UART_SYSTEM_PASS text=MENU_CASES_1_2_3_4_R_UNK commands=7

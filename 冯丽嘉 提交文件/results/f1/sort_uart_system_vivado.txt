@@ -1,0 +1,117 @@
+
+****** Vivado v2019.2 (64-bit)
+  **** SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+  **** IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source cpu/system/scripts/run_sort_uart_sim.tcl
+# set script_dir [file dirname [file normalize [info script]]]
+# set system_dir [file normalize [file join $script_dir ..]]
+# set cpu_dir [file normalize [file join $system_dir ..]]
+# set repo_dir [file normalize [file join $cpu_dir ..]]
+# set stage_dir [file normalize [file join $::env(TEMP) bit_hw_sort_uart_sim]]
+# file delete -force $stage_dir
+# file mkdir $stage_dir
+# foreach source [glob [file join $cpu_dir pipeline src *.v]] {
+#     file copy -force $source [file join $stage_dir [file tail $source]]
+# }
+# file copy -force [file join $system_dir src cpu_system.v] $stage_dir
+# file copy -force [file join $system_dir sim sort_uart_tb.v] $stage_dir
+# file copy -force [file join $system_dir programs sort_uart.mem] $stage_dir
+# set env_matches [glob -nocomplain [file join $repo_dir * rtl system_env.v]]
+# set uart_matches [glob -nocomplain [file join $repo_dir * rtl uart_mmio.v]]
+# if {[llength $env_matches] != 1 || [llength $uart_matches] != 1} {
+#     error "SYSTEM_ENV_SOURCES_NOT_UNIQUE"
+# }
+# file copy -force [lindex $env_matches 0] [file join $stage_dir system_env.v]
+# file copy -force [lindex $uart_matches 0] [file join $stage_dir uart_mmio.v]
+# set original_dir [pwd]
+# cd $stage_dir
+# set sources [glob [file join $stage_dir *.v]]
+# set transcript ""
+# foreach cmd [list \
+#     [list xvlog -sv {*}$sources] \
+#     [list xelab sort_uart_tb -s sort_uart_snapshot -debug typical] \
+#     [list xsim sort_uart_snapshot -runall]] {
+#     if {[catch {exec {*}$cmd 2>@1} result]} {
+#         append transcript "$result\n"
+#         cd $original_dir
+#         error "SORT_UART_SYSTEM_FAILED\n$transcript"
+#     }
+#     append transcript "$result\n"
+# }
+# cd $original_dir
+# if {[string first "SORT_UART_SYSTEM_PASS" $transcript] < 0} {
+#     error "SORT_UART_SYSTEM_MARKER_MISSING\n$transcript"
+# }
+# puts "SORT_UART system integration: PASS"
+SORT_UART system integration: PASS
+# puts $transcript
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/address_guard.v" into library work
+INFO: [VRFC 10-311] analyzing module address_guard
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/btfnt_predictor.v" into library work
+INFO: [VRFC 10-311] analyzing module btfnt_predictor
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/cpu_system.v" into library work
+INFO: [VRFC 10-311] analyzing module CpuSystem
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/overflow_detect.v" into library work
+INFO: [VRFC 10-311] analyzing module overflow_detect
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/pipeline_cpu.v" into library work
+INFO: [VRFC 10-311] analyzing module PipelineCPU
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/sort_uart_tb.v" into library work
+INFO: [VRFC 10-311] analyzing module sort_uart_tb
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/system_env.v" into library work
+INFO: [VRFC 10-311] analyzing module system_env
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/uart_mmio.v" into library work
+INFO: [VRFC 10-311] analyzing module uart_mmio
+Vivado Simulator 2019.2
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: D:\1_learning\¹éµµ\2025-2026-2\Xilinx\Vivado\2019.2\bin\unwrapped\win64.o\xelab.exe sort_uart_tb -s sort_uart_snapshot -debug typical 
+Multi-threading is on. Using 18 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.btfnt_predictor
+Compiling module work.overflow_detect
+Compiling module work.address_guard
+Compiling module work.PipelineCPU
+Compiling module work.uart_mmio(BIT_CYCLES=8)
+Compiling module work.system_env(ROM_FILE="sort_uart.m...
+Compiling module work.CpuSystem(ROM_FILE="sort_uart.me...
+Compiling module work.sort_uart_tb
+Built simulation snapshot sort_uart_snapshot
+
+****** Webtalk v2019.2 (64-bit)
+  **** SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+  **** IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/xsim.dir/sort_uart_snapshot/webtalk/xsim_webtalk.tcl -notrace
+INFO: [Common 17-206] Exiting Webtalk at Thu Sep 17 19:29:49 2026...
+
+****** xsim v2019.2 (64-bit)
+  **** SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+  **** IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/sort_uart_snapshot/xsim_script.tcl
+# xsim {sort_uart_snapshot} -autoloadwcfg -runall
+Vivado Simulator 2019.2
+Time resolution is 1 ps
+run -all
+SORT_UART_MENU_OK
+SORT_UART_CMD2_OK
+SORT_UART_CMDR_OK
+SORT_UART_CMD1_OK
+SORT_UART_CMD3_OK
+SORT_UART_CMD4_OK
+SORT_UART_UNK_OK
+SORT_UART_SYSTEM_PASS text=MENU_CASES_1_2_3_4_R_UNK commands=7
+$finish called at time : 430435 ns : File "C:/Users/86188/AppData/Local/Temp/bit_hw_sort_uart_sim/sort_uart_tb.v" Line 514
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Sep 17 19:29:55 2026...
+
+# file delete -force $stage_dir
+INFO: [Common 17-206] Exiting Vivado at Thu Sep 17 19:29:55 2026...
