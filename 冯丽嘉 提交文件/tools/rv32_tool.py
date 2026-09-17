@@ -9,7 +9,7 @@ rv32_tool.py — 冯丽嘉应用汇编的汇编器 + 逻辑仿真器 + 验证器
 用途：
   1. 把 sort_uart.asm 汇编成机器码，写出 sort_uart.mem（供 system_env 的 $readmemh 加载）。
   2. 用一个顺序执行的模型 CPU + 简化的 UART 模型，端到端验证：
-       排序结果、UART 输出字符串、收到 'r' 后重新运行。
+       上电菜单、命令 1/2/3/4/r、未知命令、CR/LF 忽略、排序结果。
 
 运行：python rv32_tool.py （仅需 Python 3，无需 iverilog / RARS）
 """
@@ -247,6 +247,38 @@ class Sim:
 
 
 # ---------------- 验证 ----------------
+MENU = (
+    b"BIT CPU + UART DEMO\r\n"
+    b"1 - SORTED\r\n"
+    b"2 - REVERSE\r\n"
+    b"3 - DUPLICATES\r\n"
+    b"4 - RANDOM\r\n"
+    b"r - REPEAT\r\n"
+    b">"
+)
+
+
+def case_text(num, name, inn, out):
+    return (
+        b"\r\nCASE " + str(num).encode() + b": " + name + b"\r\n"
+        b"IN : " + inn + b"\r\n"
+        b"OUT: " + out + b"\r\n"
+        b"PASS\r\n>"
+    )
+
+
+def ram5(sim):
+    return [sim.ram.get(4 * i, 0) for i in range(5)]
+
+
+def feed(sim, ch, steps=12000):
+    start = len(sim.tx_bytes)
+    sim.rx_data = ord(ch) if isinstance(ch, str) else ch
+    sim.rx_valid = 1
+    sim.run(steps)
+    return bytes(sim.tx_bytes[start:])
+
+
 def main():
     here = os.path.dirname(os.path.abspath(__file__))
     asm_path = os.path.join(here, "..", "programs", "sort_uart.asm")
@@ -259,36 +291,49 @@ def main():
         for w in words:
             f.write(f"{w:08X}\n")
 
-    expected = b"SORT: 1 2 3 4 5\r\n"
+    print(f"指令条数: {len(words)}")
+    if len(words) > 1024:
+        print("[FAIL] 超过板上 ROM_WORDS=1024")
+        sys.exit(1)
 
     sim = Sim(words)
-    sim.run(4000)
-    tx1 = bytes(sim.tx_bytes)
-    ram1 = [sim.ram.get(4 * i, 0) for i in range(5)]
+    sim.run(20000)
+    boot = bytes(sim.tx_bytes)
+    print(f"上电输出: {boot!r}")
+    if boot != MENU:
+        print(f"[FAIL] 菜单不符，期望 {MENU!r}")
+        sys.exit(1)
 
-    sim.rx_data = ord('r')
-    sim.rx_valid = 1
-    sim.run(4000)
-    tx2 = bytes(sim.tx_bytes[len(tx1):])
-    ram2 = [sim.ram.get(4 * i, 0) for i in range(5)]
+    cases = [
+        ("2", 2, b"REVERSE", b"5 4 3 2 1", b"1 2 3 4 5", [1, 2, 3, 4, 5]),
+        ("r", 2, b"REVERSE", b"5 4 3 2 1", b"1 2 3 4 5", [1, 2, 3, 4, 5]),
+        ("1", 1, b"SORTED", b"1 2 3 4 5", b"1 2 3 4 5", [1, 2, 3, 4, 5]),
+        ("3", 3, b"DUPLICATES", b"3 1 3 2 1", b"1 1 2 3 3", [1, 1, 2, 3, 3]),
+        ("4", 4, b"RANDOM", b"4 2 5 1 3", b"1 2 3 4 5", [1, 2, 3, 4, 5]),
+    ]
+    for cmd, num, name, inn, out, ram in cases:
+        tx = feed(sim, cmd)
+        exp = case_text(num, name, inn, out)
+        print(f"命令 {cmd!r} 输出: {tx!r}")
+        if tx != exp:
+            print(f"[FAIL] 命令 {cmd!r} 不符，期望 {exp!r}")
+            sys.exit(1)
+        got = ram5(sim)
+        if got != ram:
+            print(f"[FAIL] 命令 {cmd!r} RAM={got} 期望 {ram}")
+            sys.exit(1)
 
-    print(f"指令条数: {len(words)}")
-    print(f"第一轮输出: {tx1!r}")
-    print(f"第二轮输出: {tx2!r}")
-    print(f"排序后 RAM : {ram1}")
-    print(f"重跑后 RAM : {ram2}")
+    cr = feed(sim, "\r", 4000)
+    lf = feed(sim, "\n", 4000)
+    if cr or lf:
+        print(f"[FAIL] CR/LF 应无输出，实际 CR={cr!r} LF={lf!r}")
+        sys.exit(1)
 
-    ok = (tx1 == expected and tx2 == expected
-          and ram1 == [1, 2, 3, 4, 5] and ram2 == [1, 2, 3, 4, 5])
-    if not ok:
-        if tx1 != expected:
-            print(f"[FAIL] 第一轮输出不符，期望 {expected!r}")
-        if tx2 != expected:
-            print(f"[FAIL] 第二轮输出不符，期望 {expected!r}")
-        if ram1 != [1, 2, 3, 4, 5]:
-            print(f"[FAIL] 排序结果错误: {ram1}")
-        if ram2 != [1, 2, 3, 4, 5]:
-            print(f"[FAIL] 重跑排序结果错误: {ram2}")
+    unk = feed(sim, "x")
+    exp_unk = b"\r\nUNKNOWN COMMAND\r\n>"
+    print(f"未知命令输出: {unk!r}")
+    if unk != exp_unk:
+        print(f"[FAIL] 未知命令不符，期望 {exp_unk!r}")
         sys.exit(1)
 
     print("[PASS] 全部验证通过")
