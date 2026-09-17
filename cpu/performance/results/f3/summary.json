@@ -11,9 +11,9 @@
     "cpi": 1.0,
     "same_clock_cpu_time_us": 2.1,
     "same_clock_speedup_vs_single": 1.0,
-    "model_period_ns": 100,
-    "ideal_cpu_time_us": 2.1,
-    "ideal_speedup_vs_single": 1.0,
+    "configured_period_ns": 100,
+    "configured_cpu_time_us": 2.1,
+    "configured_speedup_vs_single": 1.0,
     "prediction_gain_vs_off": null
   },
   {
@@ -28,9 +28,9 @@
     "cpi": 1.1904761904761905,
     "same_clock_cpu_time_us": 2.5,
     "same_clock_speedup_vs_single": 0.84,
-    "model_period_ns": 20,
-    "ideal_cpu_time_us": 0.5,
-    "ideal_speedup_vs_single": 4.2,
+    "configured_period_ns": 20,
+    "configured_cpu_time_us": 0.5,
+    "configured_speedup_vs_single": 4.2,
     "prediction_gain_vs_off": null
   },
   {
@@ -45,9 +45,9 @@
     "cpi": 1.1904761904761905,
     "same_clock_cpu_time_us": 2.5,
     "same_clock_speedup_vs_single": 0.84,
-    "model_period_ns": 20,
-    "ideal_cpu_time_us": 0.5,
-    "ideal_speedup_vs_single": 4.2,
+    "configured_period_ns": 20,
+    "configured_cpu_time_us": 0.5,
+    "configured_speedup_vs_single": 4.2,
     "prediction_gain_vs_off": 1.0
   },
   {
@@ -62,9 +62,9 @@
     "cpi": 1.0,
     "same_clock_cpu_time_us": 2.1,
     "same_clock_speedup_vs_single": 1.0,
-    "model_period_ns": 100,
-    "ideal_cpu_time_us": 2.1,
-    "ideal_speedup_vs_single": 1.0,
+    "configured_period_ns": 100,
+    "configured_cpu_time_us": 2.1,
+    "configured_speedup_vs_single": 1.0,
     "prediction_gain_vs_off": null
   },
   {
@@ -79,9 +79,9 @@
     "cpi": 3.9047619047619047,
     "same_clock_cpu_time_us": 8.2,
     "same_clock_speedup_vs_single": 0.25609756097560976,
-    "model_period_ns": 20,
-    "ideal_cpu_time_us": 1.64,
-    "ideal_speedup_vs_single": 1.2804878048780488,
+    "configured_period_ns": 20,
+    "configured_cpu_time_us": 1.64,
+    "configured_speedup_vs_single": 1.2804878048780488,
     "prediction_gain_vs_off": null
   },
   {
@@ -96,9 +96,9 @@
     "cpi": 3.9047619047619047,
     "same_clock_cpu_time_us": 8.2,
     "same_clock_speedup_vs_single": 0.25609756097560976,
-    "model_period_ns": 20,
-    "ideal_cpu_time_us": 1.64,
-    "ideal_speedup_vs_single": 1.2804878048780488,
+    "configured_period_ns": 20,
+    "configured_cpu_time_us": 1.64,
+    "configured_speedup_vs_single": 1.2804878048780488,
     "prediction_gain_vs_off": 1.0
   },
   {
@@ -113,9 +113,9 @@
     "cpi": 1.0,
     "same_clock_cpu_time_us": 9.4,
     "same_clock_speedup_vs_single": 1.0,
-    "model_period_ns": 100,
-    "ideal_cpu_time_us": 9.4,
-    "ideal_speedup_vs_single": 1.0,
+    "configured_period_ns": 100,
+    "configured_cpu_time_us": 9.4,
+    "configured_speedup_vs_single": 1.0,
     "prediction_gain_vs_off": null
   },
   {
@@ -130,9 +130,9 @@
     "cpi": 2.404255319148936,
     "same_clock_cpu_time_us": 22.6,
     "same_clock_speedup_vs_single": 0.415929203539823,
-    "model_period_ns": 20,
-    "ideal_cpu_time_us": 4.52,
-    "ideal_speedup_vs_single": 2.079646017699115,
+    "configured_period_ns": 20,
+    "configured_cpu_time_us": 4.52,
+    "configured_speedup_vs_single": 2.079646017699115,
     "prediction_gain_vs_off": null
   },
   {
@@ -147,9 +147,9 @@
     "cpi": 2.372340425531915,
     "same_clock_cpu_time_us": 22.3,
     "same_clock_speedup_vs_single": 0.42152466367713004,
-    "model_period_ns": 20,
-    "ideal_cpu_time_us": 4.46,
-    "ideal_speedup_vs_single": 2.10762331838565,
+    "configured_period_ns": 20,
+    "configured_cpu_time_us": 4.46,
+    "configured_speedup_vs_single": 2.10762331838565,
     "prediction_gain_vs_off": 1.0134529147982063
   }
 ]
