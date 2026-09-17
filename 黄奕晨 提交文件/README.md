@@ -1,5 +1,7 @@
 # 黄奕晨 提交文件说明
 
+后续智能体请先读同目录 [给后续智能体.md](给后续智能体.md)，再读本文。当前上板程序以本目录 `programs/sort_uart.asm` / `sort_uart.mem` 为准，不要用冯丽嘉目录里的旧 ROM。
+
 本文件夹是给组内 GitHub 用的源码副本（目录名：`黄奕晨 提交文件`）。整夹都可以上传；**每个人实际只用其中一部分**。下面按人列出：必须拿走哪些文件、不要用哪些、拿去干什么。
 
 约定（四人都要知道，不必每人复制一遍 RTL）：
@@ -66,7 +68,7 @@ GitHub 上建议保留整个「黄奕晨 提交文件」，避免有人漏下 `s
 - `sim/env_tb.v`（那是外设自检，不是 CPU testbench）
 - 全部 `board_*.v`、约束、`ip/`、板上 Tcl
 
-`system_env` 的 `clk` 必须是 **10 MHz**。100 MHz 分频在板级包装里做，不是 CPU 里做。ROM 默认 NOP；排序机器码由冯丽嘉提供后，用参数 `ROM_FILE` 配置。RAM 复位不清零，程序必须自己写数组。
+`system_env` 的 `clk` 必须是 **10 MHz**。100 MHz 分频在板级包装里做，不是 CPU 里做。ROM 默认 NOP；当前排序机器码在本目录 `programs/sort_uart.mem`，用参数 `ROM_FILE` 配置。RAM 复位不清零，程序必须自己写数组。
 
 ### CPU 接 system_env 的端口
 
@@ -117,7 +119,8 @@ GitHub 上建议保留整个「黄奕晨 提交文件」，避免有人漏下 `s
 | `rtl/board_smoke.v` + `constraints/ees338_smoke.xdc` | LED 冒烟 |
 | `rtl/board_clk.v` + `ip/clk_wiz_0/` | 100 MHz → 10 MHz |
 | `rtl/board_uart_ok.v` + `constraints/ees338_uart.xdc` | 上板发 `UART_OK` |
-| `rtl/board_cpu_system.v` + `programs/sort_uart.mem` + `build_cpu_system.tcl` | 完整系统上板：Clocking Wizard + `CpuSystem` + 排序 ROM；约束仍用 `ees338_uart.xdc` |
+| `rtl/board_cpu_system.v` + `programs/sort_uart.mem` + `build_cpu_system.tcl` | 完整系统上板：Clocking Wizard + `CpuSystem` + **本目录**交互式排序 ROM（菜单 `1/2/3/4/s/r`）；约束仍用 `ees338_uart.xdc` |
+| `programs/sort_uart.asm` + `tools/build_sort_uart.py` | 当前应用源码与汇编脚本。改演示只改这两份再生成 mem，不要改 UART |
 | `ip/uart_mmio/` + `package_uart_ip.tcl` | F2：已有 `uart_mmio` 的 Vivado IP 包（`bit.lab:user:uart_mmio:1.0`）及使用步骤；封装不改 RTL |
 | 根目录 Tcl | 你本机英文路径下的重建/下载脚本，组员一般不跑 |
 
