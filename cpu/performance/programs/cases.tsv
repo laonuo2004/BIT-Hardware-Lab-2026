@@ -1,0 +1,4 @@
+# program\ttest_id\tend_pc_decimal\ttext_mem\tdata_mem
+independent	0	80	independent_text.mem	independent_data.mem
+dependency	1	80	dependency_text.mem	dependency_data.mem
+sort	2	64	sort_text.mem	sort_data.mem

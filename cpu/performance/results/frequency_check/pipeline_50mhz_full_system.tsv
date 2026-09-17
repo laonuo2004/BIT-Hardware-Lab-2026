@@ -1,0 +1,2 @@
+frequency_mhz	period_ns	wns_ns	timing_met	uart_bit_cycles	baud
+50	20	6.527	1	434	115200

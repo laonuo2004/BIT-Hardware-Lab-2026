@@ -1,0 +1,43 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "<repository>/cpu/pipeline/src/address_guard.v" into library work
+INFO: [VRFC 10-311] analyzing module address_guard
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "<repository>/cpu/pipeline/src/btfnt_predictor.v" into library work
+INFO: [VRFC 10-311] analyzing module btfnt_predictor
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "<repository>/cpu/pipeline/src/overflow_detect.v" into library work
+INFO: [VRFC 10-311] analyzing module overflow_detect
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "<repository>/cpu/pipeline/src/pipeline_cpu.v" into library work
+INFO: [VRFC 10-311] analyzing module PipelineCPU
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "<repository>/cpu/performance/sim/perf_pipeline_tb.v" into library work
+INFO: [VRFC 10-311] analyzing module perf_pipeline_tb
+Vivado Simulator 2019.2
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: E:\Vivado\Vivado\2019.2\bin\unwrapped\win64.o\xelab.exe perf_pipeline_tb -s sim_snapshot -debug typical -generic_top TEST_ID=2 -generic_top END_PC=64 -generic_top PREDICT_EN=0 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.btfnt_predictor(PREDICT_EN=0)
+Compiling module work.overflow_detect
+Compiling module work.address_guard
+Compiling module work.PipelineCPU(PREDICT_EN=0)
+Compiling module work.perf_pipeline_tb(PREDICT_EN=0,TE...
+Built simulation snapshot sim_snapshot
+
+****** xsim v2019.2 (64-bit)
+  **** SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+  **** IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/sim_snapshot/xsim_script.tcl
+# xsim {sim_snapshot} -autoloadwcfg -runall
+Vivado Simulator 2019.2
+Time resolution is 1 ps
+run -all
+F3_RESULT version=pipeline_off program=sort cycles=226 retired=94 stalls=83 branches=31 mispredicts=19 time_ns=22600
+F3_PASS
+$finish called at time : 22651 ns : File "<repository>/cpu/performance/sim/perf_pipeline_tb.v" Line 99
+exit
+INFO: [Common 17-206] Exiting xsim at Thu Sep 17 21:04:44 2026...
+
