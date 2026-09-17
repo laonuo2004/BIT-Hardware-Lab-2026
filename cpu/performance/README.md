@@ -27,4 +27,6 @@ python cpu/performance/scripts/summarize_results.py
 
 正式结果位于 `results/f3`。`summary.csv` 供制图，`summary.md` 供报告和答辩核对，`raw` 保存每组 Vivado 原始记录。
 
+本次正式运行结果为 **9/9 通过**。完整数字见 [汇总表](results/f3/summary.md)，交给第 13 页制作者的精简口径见 [第13页PPT材料](results/f3/第13页PPT材料.md)。
+
 现有单周期 `cpu_sort_tb.v` 的固定 `#1200` 只用于功能检查，不参与 F3 性能计算。
