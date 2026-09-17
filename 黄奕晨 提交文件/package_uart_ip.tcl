@@ -1,6 +1,6 @@
 # Package existing uart_mmio as Vivado 2019.2 IP. Do not rewrite UART RTL.
-# English path only. Then import the packaged HDL in a fresh sim and rerun uart_mmio_tb.
-set root {C:/Users/34556/Desktop/bgroup/b_group}
+# Paths are relative to this script. Then import the packaged HDL and rerun uart_mmio_tb.
+set root [file dirname [file normalize [info script]]]
 set ip_root [file join $root ip uart_mmio]
 set pkg_build [file join $root uart_ip_pack_build]
 set stage_dir [file normalize [file join $::env(TEMP) bit_hw_uart_ip_verify]]
@@ -46,7 +46,19 @@ foreach f $ip_src {
   file copy -force $f [file join $stage_dir [file tail $f]]
 }
 file copy -force [file join $root rtl system_env.v] [file join $stage_dir system_env.v]
-file copy -force [file join $root sim uart_mmio_tb.v] [file join $stage_dir uart_mmio_tb.v]
+set tb ""
+if {[file exists [file join $root sim uart_mmio_tb.v]]} {
+  set tb [file join $root sim uart_mmio_tb.v]
+} else {
+  set tb_matches [glob -nocomplain [file join $root .. * sim uart_mmio_tb.v]]
+  if {[llength $tb_matches] == 1} {
+    set tb [lindex $tb_matches 0]
+  }
+}
+if {$tb eq ""} {
+  error "uart_mmio_tb.v not found relative to $root"
+}
+file copy -force $tb [file join $stage_dir uart_mmio_tb.v]
 
 set original_dir [pwd]
 cd $stage_dir

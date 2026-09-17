@@ -29,7 +29,7 @@ module board_cpu_system(
 
  CpuSystem #(
   .ROM_WORDS(1024),
-  .ROM_FILE("C:/Users/34556/Desktop/bgroup/b_group/programs/sort_uart.mem"),
+  .ROM_FILE("sort_uart.mem"),
   .BIT_CYCLES(87),
   .PREDICT_EN(1)
  ) u_sys(

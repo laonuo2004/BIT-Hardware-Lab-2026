@@ -1,5 +1,5 @@
 # English-path EES-338 UART_OK demo. Reuse uart_mmio and clk_wiz_0. Do not rewrite UART.
-set root {C:/Users/34556/Desktop/bgroup/b_group}
+set root [file dirname [file normalize [info script]]]
 create_project ees338_uart_ok [file join $root uart_ok_build] -part xc7a35tcsg324-1 -force
 add_files [file join $root ip clk_wiz_0 clk_wiz_0.xci]
 add_files [file join $root rtl uart_mmio.v]

@@ -1,7 +1,19 @@
-# English-path EES-338 full system: clk_wiz_0 + CpuSystem + system_env + sort_uart.mem.
+# EES-338 full system: clk_wiz_0 + CpuSystem + system_env + sort_uart.mem.
+# Run from this folder. CPU sources are ../cpu in a repo clone, or ../github_lab/cpu locally.
 # Do not rewrite UART. Do not synthesize env_tb.
-set root {C:/Users/34556/Desktop/bgroup/b_group}
-set cpu {C:/Users/34556/Desktop/bgroup/github_lab/cpu}
+set root [file dirname [file normalize [info script]]]
+set cpu ""
+foreach c [list \
+    [file normalize [file join $root .. cpu]] \
+    [file normalize [file join $root .. github_lab cpu]]] {
+  if {[file exists [file join $c pipeline src pipeline_cpu.v]]} {
+    set cpu $c
+    break
+  }
+}
+if {$cpu eq ""} {
+  error "CPU sources not found next to $root"
+}
 
 create_project ees338_cpu_system [file join $root system_build] -part xc7a35tcsg324-1 -force
 add_files [file join $root ip clk_wiz_0 clk_wiz_0.xci]

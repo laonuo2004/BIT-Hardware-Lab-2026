@@ -1,6 +1,6 @@
 # English-path EES-338 100 MHz -> 10 MHz clock wrapper.
 # Do not synthesize env_tb or system_env. Do not touch UART.
-set root {C:/Users/34556/Desktop/bgroup/b_group}
+set root [file dirname [file normalize [info script]]]
 set ipdir [file join $root ip]
 file mkdir $ipdir
 

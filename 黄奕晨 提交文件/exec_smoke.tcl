@@ -1,6 +1,6 @@
 # English-path EES-338 LED smoke: reset runs, bitstream, program.
 # Do not synthesize env_tb or system_env. Do not touch UART.
-set root {C:/Users/34556/Desktop/bgroup/b_group}
+set root [file dirname [file normalize [info script]]]
 set xpr [file join $root smoke_build ees338_smoke.xpr]
 if {![file exists $xpr]} {
   error "Missing project: $xpr"
