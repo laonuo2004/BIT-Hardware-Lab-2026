@@ -10,7 +10,8 @@ B 组（外设与系统运行环境）——我负责的部分：应用汇编、
 │   ├── sort_uart.asm     # 应用汇编源码（排序 + UART 输出 + 收 'r' 重跑）
 │   └── sort_uart.mem     # 机器码（由 rv32_tool.py 生成，供 system_env 的 ROM_FILE 加载）
 ├── sim/
-│   └── uart_mmio_tb.v    # 我自己的 UART 测试台（M4，14 个场景，iverilog+Vivado 全过）
+│   └── uart_mmio_tb.v    # 我自己的 UART 测试台（M4，15 个场景，iverilog+Vivado 全过）
+├── results/f1/        # F1 测试证据：双环境日志 + 场景对应表（9/17 存档）
 ├── tools/
 │   └── rv32_tool.py      # 只支持 16 条指令的汇编器 + 顺序仿真器 + 端到端验证
 └── README.md
@@ -57,13 +58,13 @@ vvp sort_uart_tb.vvp
 `SORT_UART_SYSTEM_PASS text=SORT_1_2_3_4_5_CRLF rounds=2` —— 复位后输出一遍，收 `r` 后再输出一遍，无故障/溢出/发送错误。
 **iverilog 11.0 与 Vivado 2019.2 xsim 双环境通过**（Vivado 入口：`cpu/system/scripts/run_sort_uart_sim.tcl`）。
 
-**③ 我的 UART 测试台**（M4，14 个场景全过，iverilog + Vivado 双通过；做过 4 项变异测试，注入的 4 种 UART 缺陷全部被测试台抓住）：
+**③ 我的 UART 测试台**（M4，15 个场景全过，iverilog + Vivado 双通过；做过 4 项变异测试，注入的 4 种 UART 缺陷全部被测试台抓住）：
 
 ```sh
 iverilog -g2012 -o uart_mmio_tb.vvp \
   "黄奕晨 提交文件/rtl/uart_mmio.v" "黄奕晨 提交文件/rtl/system_env.v" \
   冯丽嘉 提交文件/sim/uart_mmio_tb.v
-vvp uart_mmio_tb.vvp   # 通过标记 UART_MMIO_TB_PASS all=14
+vvp uart_mmio_tb.vvp   # 通过标记 UART_MMIO_TB_PASS all=15
 ```
 
 Vivado 入口：`冯丽嘉 提交文件/scripts/run_uart_mmio_sim.tcl`（`vivado -mode batch -source` 运行）。
