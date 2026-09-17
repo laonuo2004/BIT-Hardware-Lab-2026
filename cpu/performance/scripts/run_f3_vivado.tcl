@@ -94,8 +94,13 @@ foreach version_row $versions {
 close $out
 set meta [open [file join $results_dir metadata.txt] w]
 puts $meta "tool=[version -short]"
-puts $meta "clock_hz=10000000"
-puts $meta "clock_period_ns=100"
+puts $meta "simulation_clock_hz=10000000"
+puts $meta "simulation_clock_period_ns=100"
+puts $meta "single_model_clock_hz=10000000"
+puts $meta "single_model_period_ns=100"
+puts $meta "pipeline_ideal_clock_hz=50000000"
+puts $meta "pipeline_ideal_period_ns=20"
+puts $meta "ideal_model_assumption=five_balanced_stages_without_pipeline_register_overhead"
 puts $meta "revision=[string trim [exec git -C $repo_dir rev-parse HEAD]]"
 puts $meta "matrix=$total"
 puts $meta "passed=[expr {$total-$failures}]"
