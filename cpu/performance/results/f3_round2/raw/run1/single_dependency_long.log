@@ -1,0 +1,50 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "<repository>/cpu/single_cycle_baseline/src/Top.v" into library work
+INFO: [VRFC 10-311] analyzing module ProgramCounter
+INFO: [VRFC 10-311] analyzing module InstructionMemory
+INFO: [VRFC 10-311] analyzing module RegisterFile
+INFO: [VRFC 10-311] analyzing module ImmediateGenerator
+INFO: [VRFC 10-311] analyzing module ControlUnit
+INFO: [VRFC 10-311] analyzing module ALU
+INFO: [VRFC 10-311] analyzing module DataMemory
+INFO: [VRFC 10-311] analyzing module BranchUnit
+INFO: [VRFC 10-311] analyzing module Top
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "<repository>/cpu/performance/sim/perf_single_tb.v" into library work
+INFO: [VRFC 10-311] analyzing module perf_single_tb
+Vivado Simulator 2019.2
+Copyright 1986-1999, 2001-2019 Xilinx, Inc. All Rights Reserved.
+Running: E:\Vivado\Vivado\2019.2\bin\unwrapped\win64.o\xelab.exe perf_single_tb -s sim_snapshot -debug typical -generic_top TEST_ID=4 -generic_top END_PC=512 
+Multi-threading is on. Using 14 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module work.ProgramCounter
+Compiling module work.InstructionMemory
+Compiling module work.ControlUnit
+Compiling module work.ImmediateGenerator
+Compiling module work.RegisterFile
+Compiling module work.ALU
+Compiling module work.DataMemory
+Compiling module work.BranchUnit
+Compiling module work.Top
+Compiling module work.perf_single_tb(TEST_ID=4,END_PC=...
+Built simulation snapshot sim_snapshot
+
+****** xsim v2019.2 (64-bit)
+  **** SW Build 2708876 on Wed Nov  6 21:40:23 MST 2019
+  **** IP Build 2700528 on Thu Nov  7 00:09:20 MST 2019
+    ** Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/sim_snapshot/xsim_script.tcl
+# xsim {sim_snapshot} -autoloadwcfg -runall
+Vivado Simulator 2019.2
+Time resolution is 1 ps
+run -all
+F3_RESULT version=single program=dependency_long cycles=129 retired=129 stalls=0 branches=0 mispredicts=-1 time_ns=12900
+F3_PASS
+$finish called at time : 12951 ns : File "<repository>/cpu/performance/sim/perf_single_tb.v" Line 79
+exit
+INFO: [Common 17-206] Exiting xsim at Fri Sep 18 13:09:57 2026...
+

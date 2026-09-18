@@ -1,6 +1,6 @@
 tool=2019.2
-revision=fdb804244072bca5da360c98117db850ab2cf38e
-f3_worktree_clean=no
+revision=a8522dbe8e2a80742d3f106b16a9958c96bc2776
+f3_worktree_clean_at_start=yes
 simulation_clock_hz=10000000
 simulation_clock_period_ns=100
 same_clock_comparison_hz=50000000
