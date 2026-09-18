@@ -1,0 +1,13 @@
+version	program	cycles	retired	stalls	branches	mispredicts	time_ns
+single	independent_long	241	241	0	0	-1	24100
+single	dependency_long	129	129	0	0	-1	12900
+single	btfnt_loop	515	515	0	256	-1	51500
+single	sort32_reverse	3639	3639	0	1057	-1	363900
+pipeline_off	independent_long	245	241	0	0	0	24500
+pipeline_off	dependency_long	514	129	381	0	0	51400
+pipeline_off	btfnt_loop	1799	515	770	256	255	179900
+pipeline_off	sort32_reverse	7840	3639	3107	1057	528	784000
+pipeline_on	independent_long	245	241	0	0	0	24500
+pipeline_on	dependency_long	514	129	381	0	0	51400
+pipeline_on	btfnt_loop	1546	515	770	256	1	154600
+pipeline_on	sort32_reverse	7378	3639	3107	1057	33	737800

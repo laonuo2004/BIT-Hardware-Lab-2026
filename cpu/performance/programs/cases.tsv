@@ -1,4 +1,8 @@
-# program\ttest_id\tend_pc_decimal\ttext_mem\tdata_mem
-independent	0	80	independent_text.mem	independent_data.mem
-dependency	1	80	dependency_text.mem	dependency_data.mem
-sort	2	64	sort_text.mem	sort_data.mem
+# program	test_id	end_pc_decimal	text_mem	data_mem	round
+independent	0	80	independent_text.mem	independent_data.mem	1
+dependency	1	80	dependency_text.mem	dependency_data.mem	1
+sort	2	64	sort_text.mem	sort_data.mem	1
+independent_long	3	960	independent_long_text.mem	independent_long_data.mem	2
+dependency_long	4	512	dependency_long_text.mem	dependency_long_data.mem	2
+btfnt_loop	5	16	btfnt_loop_text.mem	btfnt_loop_data.mem	2
+sort32_reverse	6	64	sort32_reverse_text.mem	sort32_reverse_data.mem	2

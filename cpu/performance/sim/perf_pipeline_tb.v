@@ -15,6 +15,7 @@ module perf_pipeline_tb;
   integer stalls = 0;
   integer counting = 0;
   integer passed = 0;
+  integer check_index;
 
   wire [31:0] ia, da, dw;
   wire [31:0] ir = imem[ia[9:2]];
@@ -59,6 +60,15 @@ module perf_pipeline_tb;
         2: passed = (dmem[0] === 32'd1 && dmem[1] === 32'd2 &&
                      dmem[2] === 32'd3 && dmem[3] === 32'd4 &&
                      dmem[4] === 32'd5);
+        3: passed = (dut.regs[28] === 32'd21 && dut.regs[29] === 32'd22 &&
+                     dut.regs[30] === 32'd23);
+        4: passed = (dut.regs[1] === 32'd128);
+        5: passed = (dut.regs[1] === 32'd256);
+        6: begin
+          passed = 1;
+          for (check_index=0; check_index<32; check_index=check_index+1)
+            if (dmem[check_index] !== check_index+1) passed = 0;
+        end
       endcase
       if (!passed) $fatal(1, "F3_PIPE_RESULT_FAIL predict=%0d test=%0d", PREDICT_EN, TEST_ID);
       if (fv) $fatal(1, "F3_PIPE_FAULT reason=%0d pc=%h addr=%h", fr, fpc, fa);
@@ -87,12 +97,20 @@ module perf_pipeline_tb;
                 0: $display("F3_RESULT version=pipeline_on program=independent cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
                 1: $display("F3_RESULT version=pipeline_on program=dependency cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
                 2: $display("F3_RESULT version=pipeline_on program=sort cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
+                3: $display("F3_RESULT version=pipeline_on program=independent_long cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
+                4: $display("F3_RESULT version=pipeline_on program=dependency_long cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
+                5: $display("F3_RESULT version=pipeline_on program=btfnt_loop cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
+                6: $display("F3_RESULT version=pipeline_on program=sort32_reverse cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
               endcase
             end else begin
               case (TEST_ID)
                 0: $display("F3_RESULT version=pipeline_off program=independent cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
                 1: $display("F3_RESULT version=pipeline_off program=dependency cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
                 2: $display("F3_RESULT version=pipeline_off program=sort cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
+                3: $display("F3_RESULT version=pipeline_off program=independent_long cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
+                4: $display("F3_RESULT version=pipeline_off program=dependency_long cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
+                5: $display("F3_RESULT version=pipeline_off program=btfnt_loop cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
+                6: $display("F3_RESULT version=pipeline_off program=sort32_reverse cycles=%0d retired=%0d stalls=%0d branches=%0d mispredicts=%0d time_ns=%0d", cycles, retired, stalls, bc, mc, cycles*100);
               endcase
             end
             $display("F3_PASS");
@@ -104,7 +122,7 @@ module perf_pipeline_tb;
   end
 
   initial begin
-    #200000;
+    #2500000;
     $fatal(1, "F3_PIPE_TIMEOUT predict=%0d test=%0d", PREDICT_EN, TEST_ID);
   end
 endmodule

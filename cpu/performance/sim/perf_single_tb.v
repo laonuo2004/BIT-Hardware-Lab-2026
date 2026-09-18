@@ -11,6 +11,7 @@ module perf_single_tb;
   integer branches = 0;
   integer counting = 0;
   integer passed = 0;
+  integer check_index;
 
   Top dut(.clk(clk), .rst(rst));
   wire [31:0] pc = dut.pc;
@@ -35,6 +36,16 @@ module perf_single_tb;
                      dut.data_memory.mem[2] === 32'd3 &&
                      dut.data_memory.mem[3] === 32'd4 &&
                      dut.data_memory.mem[4] === 32'd5);
+        3: passed = (dut.register_file.regs[28] === 32'd21 &&
+                     dut.register_file.regs[29] === 32'd22 &&
+                     dut.register_file.regs[30] === 32'd23);
+        4: passed = (dut.register_file.regs[1] === 32'd128);
+        5: passed = (dut.register_file.regs[1] === 32'd256);
+        6: begin
+          passed = 1;
+          for (check_index=0; check_index<32; check_index=check_index+1)
+            if (dut.data_memory.mem[check_index] !== check_index+1) passed = 0;
+        end
       endcase
       if (!passed) $fatal(1, "F3_SINGLE_RESULT_FAIL test=%0d", TEST_ID);
     end
@@ -59,6 +70,10 @@ module perf_single_tb;
             0: $display("F3_RESULT version=single program=independent cycles=%0d retired=%0d stalls=0 branches=%0d mispredicts=-1 time_ns=%0d", cycles, retired, branches, cycles*100);
             1: $display("F3_RESULT version=single program=dependency cycles=%0d retired=%0d stalls=0 branches=%0d mispredicts=-1 time_ns=%0d", cycles, retired, branches, cycles*100);
             2: $display("F3_RESULT version=single program=sort cycles=%0d retired=%0d stalls=0 branches=%0d mispredicts=-1 time_ns=%0d", cycles, retired, branches, cycles*100);
+            3: $display("F3_RESULT version=single program=independent_long cycles=%0d retired=%0d stalls=0 branches=%0d mispredicts=-1 time_ns=%0d", cycles, retired, branches, cycles*100);
+            4: $display("F3_RESULT version=single program=dependency_long cycles=%0d retired=%0d stalls=0 branches=%0d mispredicts=-1 time_ns=%0d", cycles, retired, branches, cycles*100);
+            5: $display("F3_RESULT version=single program=btfnt_loop cycles=%0d retired=%0d stalls=0 branches=%0d mispredicts=-1 time_ns=%0d", cycles, retired, branches, cycles*100);
+            6: $display("F3_RESULT version=single program=sort32_reverse cycles=%0d retired=%0d stalls=0 branches=%0d mispredicts=-1 time_ns=%0d", cycles, retired, branches, cycles*100);
           endcase
           $display("F3_PASS");
           $finish;
@@ -68,7 +83,7 @@ module perf_single_tb;
   end
 
   initial begin
-    #200000;
+    #2500000;
     $fatal(1, "F3_SINGLE_TIMEOUT test=%0d", TEST_ID);
   end
 endmodule

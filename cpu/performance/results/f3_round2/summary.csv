@@ -1,0 +1,13 @@
+﻿program,version,cycles,retired,cpi,stalls,branches,mispredicts,mispredict_rate,time_ns,same_clock_period_ns,same_clock_cpu_time_us,same_clock_speedup_vs_single,configured_period_ns,configured_cpu_time_us,configured_speedup_vs_single,prediction_speedup_vs_off,cycle_reduction_vs_off
+independent_long,single,241,241,1.0000,0,0,-1,,24100,20,4.8200,1.0000,100,24.1000,1.0000,,
+independent_long,pipeline_off,245,241,1.0166,0,0,0,,24500,20,4.9000,0.9837,20,4.9000,4.9184,,
+independent_long,pipeline_on,245,241,1.0166,0,0,0,,24500,20,4.9000,0.9837,20,4.9000,4.9184,1.000000,0.000000
+dependency_long,single,129,129,1.0000,0,0,-1,,12900,20,2.5800,1.0000,100,12.9000,1.0000,,
+dependency_long,pipeline_off,514,129,3.9845,381,0,0,,51400,20,10.2800,0.2510,20,10.2800,1.2549,,
+dependency_long,pipeline_on,514,129,3.9845,381,0,0,,51400,20,10.2800,0.2510,20,10.2800,1.2549,1.000000,0.000000
+btfnt_loop,single,515,515,1.0000,0,256,-1,,51500,20,10.3000,1.0000,100,51.5000,1.0000,,
+btfnt_loop,pipeline_off,1799,515,3.4932,770,256,255,0.996094,179900,20,35.9800,0.2863,20,35.9800,1.4314,,
+btfnt_loop,pipeline_on,1546,515,3.0019,770,256,1,0.003906,154600,20,30.9200,0.3331,20,30.9200,1.6656,1.163648,0.140634
+sort32_reverse,single,3639,3639,1.0000,0,1057,-1,,363900,20,72.7800,1.0000,100,363.9000,1.0000,,
+sort32_reverse,pipeline_off,7840,3639,2.1544,3107,1057,528,0.499527,784000,20,156.8000,0.4642,20,156.8000,2.3208,,
+sort32_reverse,pipeline_on,7378,3639,2.0275,3107,1057,33,0.031220,737800,20,147.5600,0.4932,20,147.5600,2.4661,1.062619,0.058929
